@@ -2,23 +2,20 @@ import grok
 
 from lxml import etree
 
-from zope import schema
 from zope.interface import implements
-from zope.schema.interfaces import IField
 from zope.schema import Field
 
-from z3c.objpath.interfaces import IObjectPath
 import z3c.schema2xml
 
-from z3c.relationfield.relation import TemporaryRelation
-
-class IRelation(IField):
-    pass
+from z3c.relationfield.interfaces import IRelation
+from z3c.relationfield.relation import TemporaryRelationValue
 
 class Relation(Field):
     implements(IRelation)
 
 class RelationGenerator(grok.Adapter):
+    """Eport a relation to XML.
+    """
     grok.context(IRelation)
     grok.implements(z3c.schema2xml.IXMLGenerator)
 
@@ -31,4 +28,4 @@ class RelationGenerator(grok.Adapter):
         if element.text is None:
             return None
         path = element.text
-        return TemporaryRelation(path)
+        return TemporaryRelationValue(path)

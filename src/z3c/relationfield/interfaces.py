@@ -1,6 +1,22 @@
 from zope.interface import Interface, Attribute
+from zope.schema.interfaces import IField
 
-class IRelation(Interface):
+class IHasRelations(Interface):
+    """Marker interface indicating that the object has relations.
+
+    Use this interface to make sure that the relations get added and
+    removed from the catalog when appropriate.
+    """
+
+class IRelation(IField):
+    pass
+
+class IRelationValue(Interface):
+    """A relation between the parent object and another one.
+
+    This should be stored as the value in the object when the schema uses the
+    Relation field.
+    """
     from_object = Attribute("The object this relation is pointing from.")
 
     from_id = Attribute("Id of the object this relation is pointing from.")
@@ -27,13 +43,13 @@ class IRelation(Interface):
         "The interfaces of the to object, flattened. "
         "This includes all base interfaces.")
 
-class ITemporaryRelation(Interface):
+class ITemporaryRelationValue(Interface):
     """A temporary relation.
 
     When importing relations from XML, we cannot resolve them into
-    true Relation objects yet, as it may be that the object that is
+    true RelationValue objects yet, as it may be that the object that is
     being related to has not yet been loaded. Instead we create
-    a TemporaryRelation object that can be converted into a real one
+    a TemporaryRelationValue object that can be converted into a real one
     after the import has been concluded.
     """
     def convert():
@@ -42,12 +58,6 @@ class ITemporaryRelation(Interface):
         Returns real relation object
         """
 
-class IHasRelations(Interface):
-    """Marker interface indicating that the object has relations.
-
-    Use this interface to make sure that the relations get added and
-    removed from the catalog when appropriate.
-    """
 
 class IRelationInfo(Interface):
     """Relationship information for an object.

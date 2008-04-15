@@ -8,7 +8,7 @@ from zope.app.intid.interfaces import IIntIds
 from zc.relation.catalog import Catalog
 from zc.relation.interfaces import ICatalog
 
-from z3c.relationfield.interfaces import IRelation
+from z3c.relationfield.interfaces import IRelationValue
 
 def dump(obj, catalog, cache):
     intids = cache.get('intids')
@@ -27,14 +27,14 @@ class RelationCatalog(Catalog, grok.LocalUtility):
 
     def __init__(self):
         Catalog.__init__(self, dump, load)
-        self.addValueIndex(IRelation['from_id'])
-        self.addValueIndex(IRelation['to_id'])
-        self.addValueIndex(IRelation['from_attribute'],
+        self.addValueIndex(IRelationValue['from_id'])
+        self.addValueIndex(IRelationValue['to_id'])
+        self.addValueIndex(IRelationValue['from_attribute'],
                            btree=BTrees.family32.OI)
-        self.addValueIndex(IRelation['from_interfaces_flattened'],
+        self.addValueIndex(IRelationValue['from_interfaces_flattened'],
                            multiple=True,
                            btree=BTrees.family32.OI)
-        self.addValueIndex(IRelation['to_interfaces_flattened'],
+        self.addValueIndex(IRelationValue['to_interfaces_flattened'],
                            multiple=True,
                            btree=BTrees.family32.OI)
 

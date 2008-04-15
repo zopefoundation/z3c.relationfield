@@ -21,10 +21,11 @@ utilities registered::
 We previously defined an interface ``IItem`` with a relation field in
 it. We also defined a class ``Item`` that implements both ``IItem``
 and the special ``z3c.relationfield.interfaces.IHasRelations``
-interface. This marker interface is needed to let the relations be
-cataloged.
-
-Let's set up a test application in a container::
+interface. The ``IHasRelation`` marker interface is needed to let the
+relations be cataloged. Unfortunately we cannot define ``Item`` and
+``IItem`` in the doctest here, as these objects need to be stored in
+the ZODB cleanly and therefore need to be in a module.  Let's set up a
+test application in a container::
 
   >>> root = getRootFolder()['root'] = TestApp()
 
@@ -55,9 +56,9 @@ The relation is currently ``None``::
 
 Now we can create an item ``b`` that links to item ``a``::
 
-  >>> from z3c.relationfield.relation import Relation
+  >>> from z3c.relationfield import RelationValue
   >>> b = Item()
-  >>> b.rel = Relation(a_id)
+  >>> b.rel = RelationValue(a_id)
 
 We now store the ``b`` object, which will also set up its relation::
 
@@ -75,15 +76,16 @@ We can ask for the object it is pointing at::
   >>> to_object.__name__
   u'a'
 
-We can also get the object that is doing the pointing; the RelationProperty
-took care of setting this::
+We can also get the object that is doing the pointing; since we
+supplied the ``IHasRelations`` interface, the event system took care
+of setting this::
 
   >>> from_object = root['b'].rel.from_object
   >>> from_object.__name__
   u'b'
  
-This object is also known as the ``__parent__``; again the RelationProperty
-took care of setting this::
+This object is also known as the ``__parent__``; again the event
+sytem took care of setting this::
 
   >>> parent_object = root['b'].rel.__parent__
   >>> parent_object is from_object
@@ -177,7 +179,7 @@ Let's ask the catalog about the relation from ``b`` to ``a``::
 
   >>> l = sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   >>> l
-  [<z3c.relationfield.relation.Relation object at ...>]
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We look at this relation object again. We indeed go the right one::
 
@@ -209,7 +211,7 @@ interface ``IItem``::
   ...   'from_attribute': 'rel',
   ...   'from_interfaces_flattened': IItem,
   ...   'to_interfaces_flattened': IItem}))
-  [<z3c.relationfield.relation.Relation object at ...>]
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 There are no relations stored for another attribute::
 
@@ -246,11 +248,11 @@ Nothing points to ``c`` yet::
 We currently have a relation from ``b`` to ``a``::
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])})) 
-  [<z3c.relationfield.relation.Relation object at ...>]
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We can change the relation to point at a new object ``c``::
 
-  >>> root['b'].rel = Relation(c_id)
+  >>> root['b'].rel = RelationValue(c_id)
 
 We need to send an ``IObjectModifiedEvent`` to let the catalog know we
 have changed the relations::
@@ -261,7 +263,7 @@ have changed the relations::
 We should find now a single relation from ``b`` to ``c``::
 
   >>> sorted(catalog.findRelations({'to_id': c_id})) 
-  [<z3c.relationfield.relation.Relation object at ...>]
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 The relation to ``a`` should now be gone::
 
@@ -274,7 +276,7 @@ Removing the relation
 We have a relation from ``b`` to ``c`` right now::
 
   >>> sorted(catalog.findRelations({'to_id': c_id})) 
-  [<z3c.relationfield.relation.Relation object at ...>]
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We can clean up an existing relation from ``b`` to ``c`` by setting it
 to ``None``::
@@ -294,11 +296,11 @@ from the relation catalog, so we shouldn't be able to find it anymore::
 
 Let's reestablish the removed relation::
 
-  >>> root['b'].rel = Relation(c_id)
+  >>> root['b'].rel = RelationValue(c_id)
   >>> notify(grok.ObjectModifiedEvent(root['b']))
 
   >>> sorted(catalog.findRelations({'to_id': c_id})) 
-  [<z3c.relationfield.relation.Relation object at ...>]
+  [<z3c.relationfield.relation.RelationValue object at ...>]
           
 Copying an object with relations
 --------------------------------
@@ -341,14 +343,15 @@ Temporary relations
 If we have an import procedure where we import relations from some
 external source such as an XML file, it may be that we read a relation
 that points to an object that does not yet exist as it is yet to be
-imported. We provide a special ``TemporaryRelation`` for this case.  A
-``TemporaryRelation`` just contains the path of what it is pointing
-to, but does not resolve it yet. Let's use ``TemporaryRelation`` in a new
-object, creating a relation to ``a``::
+imported. We provide a special ``TemporaryRelationValue`` for this
+case.  A ``TemporaryRelationValue`` just contains the path of what it
+is pointing to, but does not resolve it yet. Let's use
+``TemporaryRelationValue`` in a new object, creating a relation to
+``a``::
 
-  >>> from z3c.relationfield import TemporaryRelation
+  >>> from z3c.relationfield import TemporaryRelationValue
   >>> root['d'] = Item()
-  >>> root['d'].rel = TemporaryRelation('a')
+  >>> root['d'].rel = TemporaryRelationValue('a')
 
 A modification event does not actually get this relation cataloged::
 
@@ -401,7 +404,7 @@ Now we can Grok the view::
 Let's take a look at the relation widget now::
 
   >>> from zope.publisher.browser import TestRequest
-  >>> from z3c.relationfield.widget import RelationWidget
+  >>> from z3c.relationfield import RelationWidget
   >>> request = TestRequest()
   >>> widget = RelationWidget(IItem['rel'], request)
   >>> print widget()
@@ -415,7 +418,7 @@ to. What this URL will be exactly can be controlled by defining a view
 on the object called "relationurl". Without such a view, the display
 widget will link directly to the object::
 
-  >>> from z3c.relationfield.widget import RelationDisplayWidget
+  >>> from z3c.relationfield import RelationDisplayWidget
   >>> widget = RelationDisplayWidget(IItem['rel'], request)
 
 We have to set the widget up with some data::

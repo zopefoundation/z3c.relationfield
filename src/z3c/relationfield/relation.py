@@ -7,11 +7,12 @@ from zope.app.intid.interfaces import IIntIds
 
 from z3c.objpath.interfaces import IObjectPath
 
-from z3c.relationfield.interfaces import (IRelation, ITemporaryRelation,
+from z3c.relationfield.interfaces import (IRelationValue,
+                                          ITemporaryRelationValue,
                                           IRelationInfo)
 
-class Relation(Persistent):
-    implements(IRelation)
+class RelationValue(Persistent):
+    implements(IRelationValue)
 
     def __init__(self, to_id):
         self.to_id = to_id
@@ -58,13 +59,13 @@ class Relation(Persistent):
             return cmp(self.to_id, None)
         return cmp(self.to_id, other.to_id)
 
-class TemporaryRelation(Persistent):
+class TemporaryRelationValue(Persistent):
     """A relation that isn't fully formed yet.
 
     It needs to be finalized afterwards, when we are sure all potential
     target objects exist.
     """
-    grok.implements(ITemporaryRelation)
+    grok.implements(ITemporaryRelationValue)
     
     def __init__(self, to_path):
         self.to_path = to_path
@@ -75,7 +76,7 @@ class TemporaryRelation(Persistent):
         to_object = object_path.resolve(self.to_path)
         intids = component.getUtility(IIntIds)
         to_id = intids.getId(to_object)
-        return Relation(to_id)
+        return RelationValue(to_id)
     
 def _object(id):
     intids = component.getUtility(IIntIds)

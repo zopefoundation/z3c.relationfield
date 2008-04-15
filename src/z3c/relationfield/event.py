@@ -6,10 +6,10 @@ from zope import component
 from zope.app.intid.interfaces import IIntIds
 from zc.relation.interfaces import ICatalog
 
-from z3c.relationfield.schema import Relation as RelationField
-from z3c.relationfield.relation import Relation
 from z3c.relationfield.interfaces import (IHasRelations,
-                                         IRelation, ITemporaryRelation)
+                                          IRelation,
+                                          IRelationValue,
+                                          ITemporaryRelationValue)
 
 @grok.subscribe(IHasRelations, grok.IObjectAddedEvent)
 def addRelations(obj, event):
@@ -50,7 +50,7 @@ def realize_relations(obj):
     """Given an object, convert any temporary relatiosn on it to real ones.
     """
     for name, relation in _potential_relations(obj):
-        if ITemporaryRelation.providedBy(relation):
+        if ITemporaryRelationValue.providedBy(relation):
             setattr(obj, name, relation.convert())
 
 def _setRelation(obj, name, value):
@@ -75,22 +75,22 @@ def _setRelation(obj, name, value):
     catalog.index_doc(id, value)
 
 def _relations(obj):
-    """Given an object, return tuples of name, relation.
+    """Given an object, return tuples of name, relation value.
 
     Only real relations are returned, not temporary relations.
     """
     for name, relation in _potential_relations(obj):
-        if IRelation.providedBy(relation):
+        if IRelationValue.providedBy(relation):
             yield name, relation
 
 def _potential_relations(obj):
-    """Given an object return tuples of name, relation.
+    """Given an object return tuples of name, relation value.
 
-    Returns both IRelation attributes as well as ITemporaryRelation
+    Returns both IRelationValue attributes as well as ITemporaryRelationValue
     attributes.
     """
     for iface in providedBy(obj).flattened():
         for name, field in getFields(iface).items():
-            if isinstance(field, RelationField):
+            if IRelation.providedBy(field):
                 relation = getattr(obj, name)
                 yield name, relation
