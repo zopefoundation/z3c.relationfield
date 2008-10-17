@@ -1,5 +1,3 @@
-import grok
-
 import BTrees
 
 from zope import component
@@ -22,8 +20,7 @@ def load(token, catalog, cache):
         intids = cache['intids'] = component.getUtility(IIntIds)
     return intids.getObject(token)
     
-class RelationCatalog(Catalog, grok.LocalUtility):
-    grok.provides(ICatalog)
+class RelationCatalog(Catalog):
 
     def __init__(self):
         Catalog.__init__(self, dump, load)

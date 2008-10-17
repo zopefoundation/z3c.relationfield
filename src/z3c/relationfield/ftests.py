@@ -7,6 +7,8 @@ import zope.interface
 from zope.app.intid import IntIds
 from zope.app.intid.interfaces import IIntIds
 
+from zc.relation.interfaces import ICatalog
+
 from z3c.relationfield.interfaces import IHasRelations
 from z3c.relationfield import Relation, RelationCatalog
 
@@ -30,7 +32,7 @@ class TestApp(grok.Application, grok.Container):
     """Test fixture used by README.txt.
     """
     grok.local_utility(IntIds, provides=IIntIds)
-    grok.local_utility(RelationCatalog)
+    grok.local_utility(RelationCatalog, provides=ICatalog)
   
 def test_suite():
     globs = { 'TestApp': TestApp, 'IItem': IItem, 'Item': Item }
