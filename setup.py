@@ -15,6 +15,7 @@ setup(
     license='',
     packages=find_packages('src'),
     package_dir={'': 'src'},
+    namespace_packages=['z3c'],
     include_package_data=True,
     zip_safe=False,
     install_requires=[
