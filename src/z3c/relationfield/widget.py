@@ -1,4 +1,4 @@
-import grok
+import grokcore.component as grok
 from xml.sax.saxutils import escape
 
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
@@ -7,7 +7,7 @@ from zope.app.form.browser import TextWidget, DisplayWidget
 from zope import component
 from zope.component.interfaces import ComponentLookupError
 from zope.app.form.browser.widget import renderElement
-
+from zope.traversing.browser import absoluteURL
 from z3c.objpath.interfaces import IObjectPath
 
 from z3c.relationfield.schema import IRelation
@@ -62,7 +62,7 @@ class RelationDisplayWidget(grok.MultiAdapter, DisplayWidget):
             to_url = component.getMultiAdapter((to_object, self.request),
                                                name="relationurl")()
         except ComponentLookupError:
-            to_url = grok.url(self.request, to_object)
+            to_url = absoluteURL(to_object, self.request)
         return '<a href="%s">%s</a>' % (
             to_url,
             escape(value.to_path))
