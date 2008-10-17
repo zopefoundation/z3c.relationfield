@@ -1,9 +1,13 @@
-import grok
+import grokcore.component as grok
 
 from zope.interface import providedBy
 from zope.schema import getFields
 from zope import component
 from zope.app.intid.interfaces import IIntIds
+from zope.app.container.interfaces import (IObjectAddedEvent,
+                                           IObjectRemovedEvent)
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 from zc.relation.interfaces import ICatalog
 
 from z3c.relationfield.interfaces import (IHasRelations,
@@ -11,7 +15,7 @@ from z3c.relationfield.interfaces import (IHasRelations,
                                           IRelationValue,
                                           ITemporaryRelationValue)
 
-@grok.subscribe(IHasRelations, grok.IObjectAddedEvent)
+@grok.subscribe(IHasRelations, IObjectAddedEvent)
 def addRelations(obj, event):
     """Register relations.
 
@@ -20,7 +24,7 @@ def addRelations(obj, event):
     for name, relation in _relations(obj):
          _setRelation(obj, name, relation)
 
-@grok.subscribe(IHasRelations, grok.IObjectRemovedEvent)
+@grok.subscribe(IHasRelations, IObjectRemovedEvent)
 def removeRelations(obj, event):
     """Remove relations.
 
@@ -32,7 +36,7 @@ def removeRelations(obj, event):
         if relation is not None:
             catalog.unindex(relation)
 
-@grok.subscribe(IHasRelations, grok.IObjectModifiedEvent)
+@grok.subscribe(IHasRelations, IObjectModifiedEvent)
 def updateRelations(obj, event):
     """Re-register relations, after they have been changed.
     """
