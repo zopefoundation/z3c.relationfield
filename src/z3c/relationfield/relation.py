@@ -1,4 +1,4 @@
-import grok
+import grokcore.component as grok
 
 from persistent import Persistent
 from zope.interface import implements, providedBy, Declaration
