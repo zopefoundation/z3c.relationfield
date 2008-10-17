@@ -97,6 +97,7 @@ and the object that is being pointed at::
   >>> sorted(root['b'].rel.from_interfaces)
   [<InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
    <InterfaceClass zope.app.container.interfaces.IContained>,
+   <InterfaceClass grokcore.component.interfaces.IContext>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>, 
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass persistent.interfaces.IPersistent>]
@@ -104,6 +105,7 @@ and the object that is being pointed at::
   >>> sorted(root['b'].rel.to_interfaces)
   [<InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
    <InterfaceClass zope.app.container.interfaces.IContained>, 
+   <InterfaceClass grokcore.component.interfaces.IContext>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass persistent.interfaces.IPersistent>]
@@ -113,7 +115,8 @@ We can also get the interfaces in flattened form::
   >>> sorted(root['b'].rel.from_interfaces_flattened)
   [<InterfaceClass zope.annotation.interfaces.IAnnotatable>, 
    <InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
-   <InterfaceClass zope.app.container.interfaces.IContained>, 
+   <InterfaceClass zope.app.container.interfaces.IContained>,
+   <InterfaceClass grokcore.component.interfaces.IContext>, 
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,   
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
@@ -122,7 +125,8 @@ We can also get the interfaces in flattened form::
   >>> sorted(root['b'].rel.to_interfaces_flattened)
   [<InterfaceClass zope.annotation.interfaces.IAnnotatable>, 
    <InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
-   <InterfaceClass zope.app.container.interfaces.IContained>, 
+   <InterfaceClass zope.app.container.interfaces.IContained>,
+   <InterfaceClass grokcore.component.interfaces.IContext>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
