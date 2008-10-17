@@ -19,7 +19,7 @@ First, some bookkeeping that can go away as soon as we release a fixed
 Grok. We first need to grok ftests to make sure we have the right
 utilities registered::
 
-  >>> import grok
+  >>> import grokcore.component as grok
   >>> grok.testing.grok('z3c.relationfield.ftests')
 
 We previously defined an interface ``IItem`` with a relation field in
@@ -266,7 +266,8 @@ We need to send an ``IObjectModifiedEvent`` to let the catalog know we
 have changed the relations::
 
   >>> from zope.event import notify
-  >>> notify(grok.ObjectModifiedEvent(root['b']))
+  >>> from zope.lifecycleevent import ObjectModifiedEvent
+  >>> notify(ObjectModifiedEvent(root['b']))
 
 We should find now a single relation from ``b`` to ``c``::
 
@@ -294,7 +295,7 @@ to ``None``::
 We need to send an ``IObjectModifiedEvent`` to let the catalog know we
 have changed the relations::
 
-  >>> notify(grok.ObjectModifiedEvent(root['b']))
+  >>> notify(ObjectModifiedEvent(root['b']))
 
 Setting the relation on ``b`` to ``None`` should remove that relation
 from the relation catalog, so we shouldn't be able to find it anymore::
@@ -305,7 +306,7 @@ from the relation catalog, so we shouldn't be able to find it anymore::
 Let's reestablish the removed relation::
 
   >>> root['b'].rel = RelationValue(c_id)
-  >>> notify(grok.ObjectModifiedEvent(root['b']))
+  >>> notify(ObjectModifiedEvent(root['b']))
 
   >>> sorted(catalog.findRelations({'to_id': c_id})) 
   [<z3c.relationfield.relation.RelationValue object at ...>]
@@ -364,7 +365,7 @@ is pointing to, but does not resolve it yet. Let's use
 A modification event does not actually get this relation cataloged::
 
   >>> before = sorted(catalog.findRelations({'to_id': a_id}))
-  >>> notify(grok.ObjectModifiedEvent(root['d']))
+  >>> notify(ObjectModifiedEvent(root['d']))
   >>> after = sorted(catalog.findRelations({'to_id': a_id}))
   >>> len(before) == len(after)
   True
@@ -373,7 +374,7 @@ We will now convert all temporary relations on ``d`` to real ones::
 
   >>> from z3c.relationfield import realize_relations
   >>> realize_relations(root['d'])
-  >>> notify(grok.ObjectModifiedEvent(root['d']))
+  >>> notify(ObjectModifiedEvent(root['d']))
 
 The relation will now show up in the catalog::
 
