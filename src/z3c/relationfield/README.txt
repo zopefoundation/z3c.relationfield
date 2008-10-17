@@ -7,6 +7,11 @@ RelationValue objects that store actual relations. It can index these
 relations using the ``zc.relation`` infractructure, and therefore
 efficiently answer questions about the relations.
 
+The package `z3c.relationfieldui`_ in addition provides a widget to
+edit and display Relation fields.
+
+.. _`z3c.relationfieldui`: http://pypi.python.org/pypi/z3c.relationfieldui
+
 The Relation field
 ------------------
 
