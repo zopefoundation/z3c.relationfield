@@ -20,10 +20,16 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'grok',
+        'ZODB3',
+        'grokcore.component',
+        'zope.app.intid',
+        'zope.app.container',
         'z3c.schema2xml',
         'z3c.objpath',
         'zc.relation',
+        # for tests
+        'zope.app.zcmlfiles',
+        'zope.securitypolicy',
         ],
     entry_points={},
     )

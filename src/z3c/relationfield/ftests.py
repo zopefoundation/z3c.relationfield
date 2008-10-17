@@ -1,11 +1,12 @@
 import unittest
 
-import grok
+from persistent import Persistent
 
 import zope.interface
 
-from zope.app.intid import IntIds
-from zope.app.intid.interfaces import IIntIds
+from zope.interface import implements
+from zope.app.component.site import SiteManagerContainer
+from zope.app.container.btree import BTreeContainer
 
 from zc.relation.interfaces import ICatalog
 
@@ -20,20 +21,19 @@ class IItem(zope.interface.Interface):
     """
     rel = Relation(title=u"Relation")
  
-class Item(grok.Model):
+class Item(Persistent):
     """Test fixture used by README.txt
     """
-    grok.implements(IItem, IHasRelations)
+    implements(IItem, IHasRelations)
 
     def __init__(self):
         self.rel = None
 
-class TestApp(grok.Application, grok.Container):
+class TestApp(SiteManagerContainer, BTreeContainer):
     """Test fixture used by README.txt.
     """
-    grok.local_utility(IntIds, provides=IIntIds)
-    grok.local_utility(RelationCatalog, provides=ICatalog)
-  
+    pass
+
 def test_suite():
     globs = { 'TestApp': TestApp, 'IItem': IItem, 'Item': Item }
     readme = FunctionalDocFileSuite(

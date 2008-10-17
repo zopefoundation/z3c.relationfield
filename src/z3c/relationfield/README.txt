@@ -36,8 +36,26 @@ test application in a container::
 We make sure that this is the current site, so we can look up local
 utilities in it and so on::
 
+  >>> from zope.app.component.site import LocalSiteManager
+  >>> root.setSiteManager(LocalSiteManager(root))
   >>> from zope.app.component.hooks import setSite
   >>> setSite(root)
+
+For this site to work with ``z3c.relationship``, we need to supply two
+utilities. Firstly, an ``IIntIds``::
+
+  >>> from zope.app.intid import IntIds
+  >>> from zope.app.intid.interfaces import IIntIds
+  >>> root['intids'] = intids = IntIds() 
+  >>> sm = root.getSiteManager()
+  >>> sm.registerUtility(intids, provided=IIntIds)
+
+And a relation catalog::
+
+  >>> from z3c.relationfield import RelationCatalog
+  >>> from zc.relation.interfaces import ICatalog
+  >>> root['catalog'] = catalog = RelationCatalog()
+  >>> sm.registerUtility(catalog, provided=ICatalog)
 
 We'll add an item ``a`` to it::
 
@@ -99,17 +117,13 @@ The relation also knows about the interfaces of both the pointing object
 and the object that is being pointed at::
 
   >>> sorted(root['b'].rel.from_interfaces)
-  [<InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
-   <InterfaceClass zope.app.container.interfaces.IContained>,
-   <InterfaceClass grokcore.component.interfaces.IContext>,
+  [<InterfaceClass zope.app.container.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>, 
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass persistent.interfaces.IPersistent>]
 
   >>> sorted(root['b'].rel.to_interfaces)
-  [<InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
-   <InterfaceClass zope.app.container.interfaces.IContained>, 
-   <InterfaceClass grokcore.component.interfaces.IContext>,
+  [<InterfaceClass zope.app.container.interfaces.IContained>, 
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass persistent.interfaces.IPersistent>]
@@ -117,20 +131,14 @@ and the object that is being pointed at::
 We can also get the interfaces in flattened form::
 
   >>> sorted(root['b'].rel.from_interfaces_flattened)
-  [<InterfaceClass zope.annotation.interfaces.IAnnotatable>, 
-   <InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
-   <InterfaceClass zope.app.container.interfaces.IContained>,
-   <InterfaceClass grokcore.component.interfaces.IContext>, 
+  [<InterfaceClass zope.app.container.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,   
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
    <InterfaceClass persistent.interfaces.IPersistent>, 
    <InterfaceClass zope.interface.Interface>]
   >>> sorted(root['b'].rel.to_interfaces_flattened)
-  [<InterfaceClass zope.annotation.interfaces.IAnnotatable>, 
-   <InterfaceClass zope.annotation.interfaces.IAttributeAnnotatable>, 
-   <InterfaceClass zope.app.container.interfaces.IContained>,
-   <InterfaceClass grokcore.component.interfaces.IContext>,
+  [<InterfaceClass zope.app.container.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
    <InterfaceClass z3c.relationfield.ftests.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
