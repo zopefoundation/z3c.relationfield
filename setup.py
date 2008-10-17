@@ -12,7 +12,6 @@ setup(
     keywords='',
     author='Martijn Faassen',
     author_email='faassen@startifact.com',
-    url='http://dev.inghist.nl/eggs/',
     license='',
     packages=find_packages('src'),
     package_dir={'': 'src'},
