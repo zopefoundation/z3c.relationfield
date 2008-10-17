@@ -2,11 +2,10 @@
 Relation
 ========
 
-This package implements a new schema field Relation, a widget for
-relations, and the Relation objects that store actual relations. In
-addition it can index these relations using the ``zc.relation``
-infractructure, and therefore efficiently answer questions about the
-relations.
+This package implements a new schema field Relation, and the
+RelationValue objects that store actual relations. It can index these
+relations using the ``zc.relation`` infractructure, and therefore
+efficiently answer questions about the relations.
 
 The Relation field
 ------------------
