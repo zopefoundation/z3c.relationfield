@@ -1,48 +1,70 @@
-========
-Relation
-========
+z3c.relationfield
+*****************
+
+Introduction
+============
 
 This package implements a new schema field Relation, and the
 RelationValue objects that store actual relations. It can index these
-relations using the ``zc.relation`` infractructure, and therefore
-efficiently answer questions about the relations.
+relations using the ``zc.relation`` infractructure, and using these
+indexes can efficiently answer questions about the relations.
 
 The package `z3c.relationfieldui`_ in addition provides a widget to
 edit and display Relation fields.
 
 .. _`z3c.relationfieldui`: http://pypi.python.org/pypi/z3c.relationfieldui
 
-The Relation field
-------------------
+Setup
+=====
 
-First, some bookkeeping that can go away as soon as we release a fixed
-Grok. We first need to grok ftests to make sure we have the right
-utilities registered::
+``z3c.relationfield.Relation`` is a schema field that can be used to
+express relations. Let's define a schema IItem that uses a relation
+field::
 
-  >>> import grokcore.component as grok
-  >>> grok.testing.grok('z3c.relationfield.ftests')
+  >>> from z3c.relationfield import Relation
+  >>> from zope.interface import Interface
+  >>> class IItem(Interface):
+  ...   rel = Relation(title=u"Relation")
 
-We previously defined an interface ``IItem`` with a relation field in
-it. We also defined a class ``Item`` that implements both ``IItem``
+We also define a class ``Item`` that implements both ``IItem``
 and the special ``z3c.relationfield.interfaces.IHasRelations``
-interface. The ``IHasRelation`` marker interface is needed to let the
-relations be cataloged. Unfortunately we cannot define ``Item`` and
-``IItem`` in the doctest here, as these objects need to be stored in
-the ZODB cleanly and therefore need to be in a module.  Let's set up a
-test application in a container::
+interface::
+
+  >>> from z3c.relationfield.interfaces import IHasRelations
+  >>> from persistent import Persistent
+  >>> from zope.interface import implements
+  >>> class Item(Persistent):
+  ...   implements(IItem, IHasRelations)
+  ...   def __init__(self):
+  ...     self.rel = None
+
+The ``IHasRelations`` marker interface is needed to let the relations
+on ``Item`` be cataloged (when they are put in a container and removed
+from it, for instance).
+
+Finally we need a test application::
+
+  >>> from zope.app.component.site import SiteManagerContainer
+  >>> from zope.app.container.btree import BTreeContainer
+  >>> class TestApp(SiteManagerContainer, BTreeContainer):
+  ...   pass
+
+We set up the test application::
 
   >>> root = getRootFolder()['root'] = TestApp()
 
 We make sure that this is the current site, so we can look up local
-utilities in it and so on::
+utilities in it and so on. Normally this is done automatically by
+Zope's traversal mechanism::
 
   >>> from zope.app.component.site import LocalSiteManager
   >>> root.setSiteManager(LocalSiteManager(root))
   >>> from zope.app.component.hooks import setSite
   >>> setSite(root)
 
-For this site to work with ``z3c.relationship``, we need to supply two
-utilities. Firstly, an ``IIntIds``::
+For this site to work with ``z3c.relationship``, we need to set up two
+utilities. Firstly, an ``IIntIds`` that tracks unique ids for objects
+in the ZODB::
 
   >>> from zope.app.intid import IntIds
   >>> from zope.app.intid.interfaces import IIntIds
@@ -50,14 +72,17 @@ utilities. Firstly, an ``IIntIds``::
   >>> sm = root.getSiteManager()
   >>> sm.registerUtility(intids, provided=IIntIds)
 
-And a relation catalog::
+And secondly a relation catalog that actually indexes the relations::
 
   >>> from z3c.relationfield import RelationCatalog
   >>> from zc.relation.interfaces import ICatalog
   >>> root['catalog'] = catalog = RelationCatalog()
   >>> sm.registerUtility(catalog, provided=ICatalog)
 
-We'll add an item ``a`` to it::
+Using the relation field
+========================
+
+We'll add an item ``a`` to our application::
 
   >>> root['a'] = Item()
 
@@ -76,13 +101,15 @@ The relation is currently ``None``::
   >>> root['a'].rel is None
   True
 
-Now we can create an item ``b`` that links to item ``a``::
+Now we can create an item ``b`` that links to item ``a`` (through its
+int id)::
 
   >>> from z3c.relationfield import RelationValue
   >>> b = Item()
   >>> b.rel = RelationValue(a_id)
 
-We now store the ``b`` object, which will also set up its relation::
+We now store the ``b`` object in a container, which will also set up
+its relation (as an ``IObjectAddedEvent`` will be fired)::
 
   >>> root['b'] = b
 
@@ -119,13 +146,13 @@ and the object that is being pointed at::
   >>> sorted(root['b'].rel.from_interfaces)
   [<InterfaceClass zope.app.container.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>, 
-   <InterfaceClass z3c.relationfield.ftests.IItem>, 
+   <InterfaceClass __builtin__.IItem>, 
    <InterfaceClass persistent.interfaces.IPersistent>]
 
   >>> sorted(root['b'].rel.to_interfaces)
   [<InterfaceClass zope.app.container.interfaces.IContained>, 
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass z3c.relationfield.ftests.IItem>, 
+   <InterfaceClass __builtin__.IItem>, 
    <InterfaceClass persistent.interfaces.IPersistent>]
 
 We can also get the interfaces in flattened form::
@@ -133,20 +160,20 @@ We can also get the interfaces in flattened form::
   >>> sorted(root['b'].rel.from_interfaces_flattened)
   [<InterfaceClass zope.app.container.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,   
-   <InterfaceClass z3c.relationfield.ftests.IItem>, 
+   <InterfaceClass __builtin__.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
    <InterfaceClass persistent.interfaces.IPersistent>, 
    <InterfaceClass zope.interface.Interface>]
   >>> sorted(root['b'].rel.to_interfaces_flattened)
   [<InterfaceClass zope.app.container.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass z3c.relationfield.ftests.IItem>, 
+   <InterfaceClass __builtin__.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
    <InterfaceClass persistent.interfaces.IPersistent>, 
    <InterfaceClass zope.interface.Interface>]
 
 Paths
------
+=====
 
 We can also obtain the path of the relation (both from where it is
 pointing as well as to where it is pointing). The path should be a
@@ -160,6 +187,7 @@ just the name of the object we point to. In more sophisticated
 applications a path would typically be a slash separated path, like
 ``/foo/bar``::
 
+  >>> import grokcore.component as grok
   >>> from z3c.objpath.interfaces import IObjectPath
   >>> class ObjectPath(grok.GlobalUtility):
   ...   grok.provides(IObjectPath)
@@ -182,7 +210,7 @@ We can also get the path of the object that is doing the pointing::
   u'b'
 
 Relation queries
-----------------
+================
 
 Now that we have set up and indexed a relationship between ``a`` and
 ``b``, we can issue queries using the relation catalog. Let's first
@@ -249,7 +277,7 @@ here::
   []
 
 Changing the relation
----------------------
+=====================
 
 Let's create a new object ``c``::
 
@@ -288,7 +316,7 @@ The relation to ``a`` should now be gone::
   []
 
 Removing the relation
----------------------
+=====================
 
 We have a relation from ``b`` to ``c`` right now::
 
@@ -320,7 +348,7 @@ Let's reestablish the removed relation::
   [<z3c.relationfield.relation.RelationValue object at ...>]
           
 Copying an object with relations
---------------------------------
+================================
 
 Let's copy an object with relations::
 
@@ -342,7 +370,7 @@ the other from the copy::
   u'b-2'
 
 Removing an object with relations
----------------------------------
+=================================
 
 We will remove ``b-2`` again. Its relation should automatically be removed
 from the catalog::
@@ -355,7 +383,7 @@ from the catalog::
   u'b'
 
 Temporary relations
--------------------
+===================
 
 If we have an import procedure where we import relations from some
 external source such as an XML file, it may be that we read a relation
