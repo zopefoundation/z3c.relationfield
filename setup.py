@@ -1,13 +1,23 @@
 from setuptools import setup, find_packages
 import sys, os
 
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
+long_description = (
+    read('src', 'z3c', 'relationfield', 'README.txt')
+    + '\n' +
+    read('CHANGES.txt')
+    + '\n' +
+    'Download\n'
+    '********\n'
+    )
+
 setup(
     name='z3c.relationfield',
     version='0.1dev',
-    description="A relation field framework.",
-    long_description="""z3c.relationfield defines a Zope 3 schema field to
-    manage relations, and a widget to set them. Relations are automatically
-    indexed and can be queried, using zc.relation as a base.""",
+    description="A relation field framework for Zope 3.",
+    long_description=long_description,
     classifiers=[],
     keywords='',
     author='Martijn Faassen',
