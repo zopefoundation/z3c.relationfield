@@ -34,7 +34,7 @@ setup(
         'grokcore.component',
         'zope.app.intid',
         'zope.app.container',
-        'z3c.schema2xml',
+        'z3c.schema2xml >= 1.0',
         'z3c.objpath',
         'zc.relation',
         # for tests
