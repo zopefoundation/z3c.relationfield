@@ -103,4 +103,4 @@ class RelationInfoBase(grok.Adapter):
     
     def createRelation(self):
         intids = component.getUtility(IIntIds)
-        return Relation(intids.getId(self.context))
+        return RelationValue(intids.getId(self.context))
