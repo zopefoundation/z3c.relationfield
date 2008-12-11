@@ -1,5 +1,5 @@
 from zope.interface import Interface, Attribute
-from zope.schema.interfaces import IField
+from zope.schema.interfaces import IField, IList
 
 class IHasRelations(Interface):
     """Marker interface indicating that the object has relations.
@@ -9,6 +9,9 @@ class IHasRelations(Interface):
     """
 
 class IRelation(IField):
+    pass
+
+class IRelationList(IList):
     pass
 
 class IRelationValue(Interface):

@@ -11,7 +11,7 @@ from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zc.relation.interfaces import ICatalog
 
 from z3c.relationfield.interfaces import (IHasRelations,
-                                          IRelation,
+                                          IRelation, IRelationList,
                                           IRelationValue,
                                           ITemporaryRelationValue)
 
@@ -51,11 +51,16 @@ def updateRelations(obj, event):
     addRelations(obj, event)
 
 def realize_relations(obj):
-    """Given an object, convert any temporary relatiosn on it to real ones.
+    """Given an object, convert any temporary relations on it to real ones.
     """
-    for name, relation in _potential_relations(obj):
+    for name, index, relation in _potential_relations(obj):
         if ITemporaryRelationValue.providedBy(relation):
-            setattr(obj, name, relation.convert())
+            if index is None:
+                # relation
+                setattr(obj, name, relation.convert())
+            else:
+                # relation list
+                getattr(obj, name)[index] = relation.convert()
 
 def _setRelation(obj, name, value):
     """Set a relation on an object.
@@ -83,18 +88,26 @@ def _relations(obj):
 
     Only real relations are returned, not temporary relations.
     """
-    for name, relation in _potential_relations(obj):
+    for name, index, relation in _potential_relations(obj):
         if IRelationValue.providedBy(relation):
             yield name, relation
 
 def _potential_relations(obj):
-    """Given an object return tuples of name, relation value.
+    """Given an object return tuples of name, index, relation value.
 
     Returns both IRelationValue attributes as well as ITemporaryRelationValue
     attributes.
+
+    If this is a IRelationList attribute, index will contain the index
+    in the list. If it's a IRelation attribute, index will be None.
     """
     for iface in providedBy(obj).flattened():
         for name, field in getFields(iface).items():
             if IRelation.providedBy(field):
                 relation = getattr(obj, name)
-                yield name, relation
+                yield name, None, relation
+            if IRelationList.providedBy(field):
+                l = getattr(obj, name)
+                if l is not None:
+                    for i, relation in enumerate(l):
+                        yield name, i, relation

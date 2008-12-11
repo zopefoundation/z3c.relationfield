@@ -4,7 +4,9 @@ CHANGES
 0.2 (unreleased)
 ================
 
-* ...
+* Added support for ``RelationList`` fields. This allows one to
+  maintain a list of ``RelationValue`` objects that will be cataloged
+  like the regular ``Relation`` fields.
 
 0.1 (2008-12-05)
 ================

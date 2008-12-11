@@ -382,6 +382,55 @@ from the catalog::
   >>> l[0].from_path
   u'b'
 
+RelationList
+============
+
+Let's now experiment with the ``RelationList`` field which can be used
+to maintain a list of relations::
+
+  >>> from z3c.relationfield import RelationList
+  >>> class IMultiItem(Interface):
+  ...   rel = RelationList(title=u"Relation")
+
+We also define a class ``MultiItem`` that implements both
+``IMultiItem`` and the special
+``z3c.relationfield.interfaces.IHasRelations`` interface::
+
+  >>> class MultiItem(Persistent):
+  ...   implements(IMultiItem, IHasRelations)
+  ...   def __init__(self):
+  ...     self.rel = None
+
+We set up a few object we can then create relations between::
+
+  >>> root['multi1'] = MultiItem()
+  >>> root['multi2'] = MultiItem()
+  >>> root['multi3'] = MultiItem()
+
+Let's create a relation from ``multi1`` to both ``multi2`` and
+``multi3``::
+
+  >>> multi1_id = intids.getId(root['multi1'])
+  >>> multi2_id = intids.getId(root['multi2'])
+  >>> multi3_id = intids.getId(root['multi3'])
+
+  >>> root['multi1'].rel = [RelationValue(multi2_id),
+  ...                       RelationValue(multi3_id)]
+
+We need to notify that we modified the object
+
+  >>> notify(ObjectModifiedEvent(root['multi1']))
+
+Now that this is set up, let's verify whether we can find the
+proper relations in in the catalog::
+
+  >>> len(list(catalog.findRelations({'to_id': multi2_id})))
+  1
+  >>> len(list(catalog.findRelations({'to_id': multi3_id})))
+  1
+  >>> len(list(catalog.findRelations({'from_id': multi1_id})))
+  2
+
 Temporary relations
 ===================
 
@@ -412,8 +461,34 @@ We will now convert all temporary relations on ``d`` to real ones::
   >>> realize_relations(root['d'])
   >>> notify(ObjectModifiedEvent(root['d']))
 
-The relation will now show up in the catalog::
+We can see the real relation object now::
+
+  >>> root['d'].rel
+  <z3c.relationfield.relation.RelationValue object at ...>
+
+The relation will also now show up in the catalog::
 
   >>> after2 = sorted(catalog.findRelations({'to_id': a_id}))
   >>> len(after2) > len(before)
+  True
+
+Temporary relation values also work with ``RelationList`` objects::
+  
+  >>> root['multi_temp'] = MultiItem()
+  >>> root['multi_temp'].rel = [TemporaryRelationValue('a')]
+
+Let's convert this to a real relation::
+
+  >>> realize_relations(root['multi_temp'])
+  >>> notify(ObjectModifiedEvent(root['multi_temp']))
+
+Again we can see the real relation object when we look at it::
+
+  >>> root['multi_temp'].rel
+  [<z3c.relationfield.relation.RelationValue object at ...>]
+ 
+And we will now see this new relation appear in the catalog::
+
+  >>> after3 = sorted(catalog.findRelations({'to_id': a_id}))
+  >>> len(after3) > len(after2) 
   True
