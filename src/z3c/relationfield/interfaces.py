@@ -60,14 +60,3 @@ class ITemporaryRelationValue(Interface):
 
         Returns real relation object
         """
-
-
-class IRelationInfo(Interface):
-    """Relationship information for an object.
-    """
-
-    def createRelation():
-        """Create a relation object pointing to this object.
-
-        Returns an object that provides IRelation.
-        """

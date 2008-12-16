@@ -8,6 +8,9 @@ CHANGES
   maintain a list of ``RelationValue`` objects that will be cataloged
   like the regular ``Relation`` fields.
 
+* Get rid of IRelationInfo adapter requirement. Just define a
+  ``create_relation`` function that does the same work.
+
 0.1 (2008-12-05)
 ================
 

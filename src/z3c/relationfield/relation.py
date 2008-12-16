@@ -8,8 +8,7 @@ from zope.app.intid.interfaces import IIntIds
 from z3c.objpath.interfaces import IObjectPath
 
 from z3c.relationfield.interfaces import (IRelationValue,
-                                          ITemporaryRelationValue,
-                                          IRelationInfo)
+                                          ITemporaryRelationValue)
 
 class RelationValue(Persistent):
     implements(IRelationValue)
@@ -97,10 +96,6 @@ def _path(obj):
 def _interfaces_flattened(interfaces):
     return Declaration(*interfaces).flattened()
 
-class RelationInfoBase(grok.Adapter):
-    grok.baseclass()
-    grok.provides(IRelationInfo)
-    
-    def createRelation(self):
-        intids = component.getUtility(IIntIds)
-        return RelationValue(intids.getId(self.context))
+def create_relation(obj):
+    intids = component.getUtility(IIntIds)
+    return RelationValue(intids.getId(obj))
