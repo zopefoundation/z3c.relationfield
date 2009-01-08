@@ -1,14 +1,14 @@
 CHANGES
 *******
 
-0.2 (unreleased)
+0.2 (2009-01-08)
 ================
 
 * Added support for ``RelationList`` fields. This allows one to
   maintain a list of ``RelationValue`` objects that will be cataloged
   like the regular ``Relation`` fields.
 
-* Get rid of IRelationInfo adapter requirement. Just define a
+* Get rid of ``IRelationInfo`` adapter requirement. Just define a
   ``create_relation`` function that does the same work.
 
 * When looking for relations on an object be more tolerant if those
