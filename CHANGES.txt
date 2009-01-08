@@ -11,6 +11,10 @@ CHANGES
 * Get rid of IRelationInfo adapter requirement. Just define a
   ``create_relation`` function that does the same work.
 
+* When looking for relations on an object be more tolerant if those
+  cannot be found (just skip them) - this can happen when a schema is
+  changed.
+
 0.1 (2008-12-05)
 ================
 

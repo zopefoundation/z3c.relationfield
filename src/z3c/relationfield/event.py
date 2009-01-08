@@ -104,10 +104,18 @@ def _potential_relations(obj):
     for iface in providedBy(obj).flattened():
         for name, field in getFields(iface).items():
             if IRelation.providedBy(field):
-                relation = getattr(obj, name)
+                try:
+                    relation = getattr(obj, name)
+                except AttributeError:
+                    # can't find this relation on the object
+                    continue
                 yield name, None, relation
             if IRelationList.providedBy(field):
-                l = getattr(obj, name)
+                try:
+                    l = getattr(obj, name)
+                except AttributeError:
+                    # can't find the relation list on this object
+                    continue
                 if l is not None:
                     for i, relation in enumerate(l):
                         yield name, i, relation
