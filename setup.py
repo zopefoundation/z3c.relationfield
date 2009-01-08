@@ -36,7 +36,7 @@ setup(
         'zope.app.container',
         'z3c.schema2xml >= 1.0',
         'z3c.objpath',
-        'zc.relation',
+        'zc.relation >= 1.0',
         # for tests
         'zope.app.zcmlfiles',
         'zope.securitypolicy',
