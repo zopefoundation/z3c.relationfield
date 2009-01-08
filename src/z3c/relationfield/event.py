@@ -44,8 +44,11 @@ def updateRelations(obj, event):
     intids = component.getUtility(IIntIds)
 
     # remove previous relations coming from id (now have been overwritten)
-    for relation in catalog.findRelations({'from_id': intids.getId(obj)}):
-        catalog.unindex(relation)    
+    # have to activate query here with list() before unindexing them so we don't
+    # get errors involving buckets changing size
+    rels = list(catalog.findRelations({'from_id': intids.getId(obj)}))
+    for rel in rels:
+        catalog.unindex(rel)    
 
     # add new relations
     addRelations(obj, event)
