@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.3 (unreleased)
+0.3 (2009-01-19)
 ================
 
 * Introduce two new interfaces: ``IHasOutgoingRelations`` and
