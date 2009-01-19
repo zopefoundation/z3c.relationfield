@@ -22,6 +22,12 @@ CHANGES
   You can also for broken status by calling ``isBroken`` on a
   relation.
 
+* The signature of the top-level function ``create_relation``
+  changed. It used to take the object to which the relation was to be
+  created, but should now get the path (in ``IObjectPath`` terms).
+  ``create_relation`` will now create a broken relation object if the
+  path cannot be resolved.
+
 0.2 (2009-01-08)
 ================
 

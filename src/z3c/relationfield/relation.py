@@ -81,17 +81,7 @@ class TemporaryRelationValue(Persistent):
         self.to_path = to_path
 
     def convert(self):
-        object_path = component.getUtility(IObjectPath)
-        try:
-            to_object = object_path.resolve(self.to_path)
-        except ValueError:
-            # we have a broken relation, so create one
-            result = RelationValue(None)
-            result.broken(self.to_path)
-            return result
-        intids = component.getUtility(IIntIds)
-        to_id = intids.getId(to_object)
-        return RelationValue(to_id)
+        return create_relation(self.to_path)
     
 def _object(id):
     if id is None:
@@ -114,6 +104,18 @@ def _path(obj):
 def _interfaces_flattened(interfaces):
     return Declaration(*interfaces).flattened()
 
-def create_relation(obj):
-    intids = component.getUtility(IIntIds)
-    return RelationValue(intids.getId(obj))
+def create_relation(to_path):
+    """Create a relation to a particular path.
+
+    Will create a broken relation if the path cannot be resolved.
+    """
+    object_path = component.getUtility(IObjectPath)
+    try:
+        to_object = object_path.resolve(to_path)
+        intids = component.getUtility(IIntIds)
+        return RelationValue(intids.getId(to_object))
+    except ValueError:
+        # create broken relation
+        result = RelationValue(None)
+        result.broken(to_path)
+        return result
