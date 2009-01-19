@@ -13,13 +13,15 @@ from z3c.relationfield.interfaces import (IRelationValue,
 class RelationValue(Persistent):
     implements(IRelationValue)
 
+    _broken_to_path = None
+    
     def __init__(self, to_id):
         self.to_id = to_id
-        # these will be set automatically by RelationProperty
+        # these will be set automatically by events
         self.from_object = None
         self.__parent__ = None
         self.from_attribute = None
-
+    
     @property
     def from_id(self):
         intids = component.getUtility(IIntIds)
@@ -43,6 +45,8 @@ class RelationValue(Persistent):
 
     @property
     def to_path(self):
+        if self.to_object is None:
+            return self._broken_to_path
         return _path(self.to_object)
 
     @property
@@ -58,6 +62,13 @@ class RelationValue(Persistent):
             return cmp(self.to_id, None)
         return cmp(self.to_id, other.to_id)
 
+    def broken(self, to_path):
+        self._broken_to_path = to_path
+        self.to_id = None
+
+    def isBroken(self):
+        return self.to_id is None
+
 class TemporaryRelationValue(Persistent):
     """A relation that isn't fully formed yet.
 
@@ -71,13 +82,20 @@ class TemporaryRelationValue(Persistent):
 
     def convert(self):
         object_path = component.getUtility(IObjectPath)
-        # XXX what if we have a broken relation?
-        to_object = object_path.resolve(self.to_path)
+        try:
+            to_object = object_path.resolve(self.to_path)
+        except ValueError:
+            # we have a broken relation, so create one
+            result = RelationValue(None)
+            result.broken(self.to_path)
+            return result
         intids = component.getUtility(IIntIds)
         to_id = intids.getId(to_object)
         return RelationValue(to_id)
     
 def _object(id):
+    if id is None:
+        return None
     intids = component.getUtility(IIntIds)
     try:
         return intids.getObject(id)

@@ -1,11 +1,27 @@
 from zope.interface import Interface, Attribute
 from zope.schema.interfaces import IField, IList
 
-class IHasRelations(Interface):
-    """Marker interface indicating that the object has relations.
+class IHasOutgoingRelations(Interface):
+    """Marker interface indicating that the object has outgoing relations.
 
-    Use this interface to make sure that the relations get added and
-    removed from the catalog when appropriate.
+    Provide this interface on your own objects with outgoing relations
+    to make sure that the relations get added and removed from the
+    catalog when appropriate.
+    """
+
+class IHasIncomingRelations(Interface):
+    """Marker interface indicating the the object has incoming relations.
+
+    Provide this interface on your own objects with incoming
+    relations. This will make sure that broken relations to that
+    object are tracked properly.
+    """
+    
+class IHasRelations(IHasIncomingRelations, IHasOutgoingRelations):
+    """Marker interface indicating that the object has relations of any kind.
+
+    Provide this interface if the object can have both outgoing as
+    well as incoming relations.
     """
 
 class IRelation(IField):
@@ -34,17 +50,36 @@ class IRelationValue(Interface):
     
     from_attribute = Attribute("The name of the attribute of the from object.")
     
-    to_object = Attribute("The object this relation is pointing to.")
+    to_object = Attribute("The object this relation is pointing to. "
+                          "This value is None if the relation is broken.")
 
-    to_id = Attribute("Id of the object this relation is pointing to.")
+    to_id = Attribute("Id of the object this relation is pointing to. "
+                      "This value is None if the relation is broken.")
 
-    to_path = Attribute("The path of the object this relation is pointing to.")
+    to_path = Attribute("The path of the object this relation is pointing to. "
+                        "If the relation is broken, this value will still "
+                        "point to the last path the relation pointed to.")
 
     to_interfaces = Attribute("The interfaces of the to-object.")
 
     to_interfaces_flattened = Attribute(
         "The interfaces of the to object, flattened. "
         "This includes all base interfaces.")
+
+    def broken(to_path):
+        """Set this relation as broken.
+
+        to_path - the (non-nonexistent) path that the relation pointed to.
+
+        The relation will be broken. If you provide
+        IHasIncomingRelations on objects that have incoming relations,
+        relations will be automatically broken when you remove an
+        object.
+        """
+
+    def isBroken():
+        """Return True if this is a broken relation.
+        """
 
 class ITemporaryRelationValue(Interface):
     """A temporary relation.

@@ -4,7 +4,23 @@ CHANGES
 0.3 (unreleased)
 ================
 
-* ...
+* Introduce two new interfaces: ``IHasOutgoingRelations`` and
+  ``IHasIncomingRelations``. ``IHasOutgoingRelations`` should be provided
+  by objects that actually have relations set on them, so that 
+  they can be properly cataloged. ``IHasIncomingRelations`` should be
+  set on objects that can be related to, so that broken relations
+  can be properly tracked. ``IHasRelations`` now extends both,
+  so if you provide those on your object you have an object that can
+  have both outgoing as well as incoming relations.
+
+* Improve broken relations support. When you now break a relation (by
+  removing the relation target), ``to_id`` and ``to_object`` become
+  ``None``. ``to_path`` however will remain the path that the relation
+  last pointed to. ``TemporaryRelation`` objects that when realized
+  are broken relations can also be created.
+
+  You can also for broken status by calling ``isBroken`` on a
+  relation.
 
 0.2 (2009-01-08)
 ================

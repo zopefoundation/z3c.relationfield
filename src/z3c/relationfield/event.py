@@ -3,19 +3,20 @@ import grokcore.component as grok
 from zope.interface import providedBy
 from zope.schema import getFields
 from zope import component
-from zope.app.intid.interfaces import IIntIds
+from zope.app.intid.interfaces import IIntIds, IIntIdRemovedEvent
 from zope.app.container.interfaces import (IObjectAddedEvent,
                                            IObjectRemovedEvent)
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 
 from zc.relation.interfaces import ICatalog
 
-from z3c.relationfield.interfaces import (IHasRelations,
+from z3c.relationfield.interfaces import (IHasOutgoingRelations,
+                                          IHasIncomingRelations,
                                           IRelation, IRelationList,
                                           IRelationValue,
                                           ITemporaryRelationValue)
 
-@grok.subscribe(IHasRelations, IObjectAddedEvent)
+@grok.subscribe(IHasOutgoingRelations, IObjectAddedEvent)
 def addRelations(obj, event):
     """Register relations.
 
@@ -24,7 +25,7 @@ def addRelations(obj, event):
     for name, relation in _relations(obj):
          _setRelation(obj, name, relation)
 
-@grok.subscribe(IHasRelations, IObjectRemovedEvent)
+@grok.subscribe(IHasOutgoingRelations, IObjectRemovedEvent)
 def removeRelations(obj, event):
     """Remove relations.
 
@@ -36,7 +37,7 @@ def removeRelations(obj, event):
         if relation is not None:
             catalog.unindex(relation)
 
-@grok.subscribe(IHasRelations, IObjectModifiedEvent)
+@grok.subscribe(IHasOutgoingRelations, IObjectModifiedEvent)
 def updateRelations(obj, event):
     """Re-register relations, after they have been changed.
     """
@@ -53,6 +54,23 @@ def updateRelations(obj, event):
     # add new relations
     addRelations(obj, event)
 
+@grok.subscribe(IIntIdRemovedEvent)
+def breakRelations(event):
+    """Break relations on any object pointing to us.
+
+    That is, store the object path on the broken relation.
+    """
+    obj = event.object
+    if not IHasIncomingRelations.providedBy(obj):
+        return
+    catalog = component.getUtility(ICatalog)
+    intids = component.getUtility(IIntIds)
+
+    # find all relations that point to us
+    rels = list(catalog.findRelations({'to_id': intids.getId(obj)}))
+    for rel in rels:
+        rel.broken(rel.to_path)
+    
 def realize_relations(obj):
     """Given an object, convert any temporary relations on it to real ones.
     """

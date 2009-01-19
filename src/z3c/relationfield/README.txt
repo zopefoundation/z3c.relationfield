@@ -40,7 +40,9 @@ interface::
 
 The ``IHasRelations`` marker interface is needed to let the relations
 on ``Item`` be cataloged (when they are put in a container and removed
-from it, for instance).
+from it, for instance). It is in fact a combination of
+``IHasIncomingRelations`` and ``IHasOutgoingRelations``, which is fine
+as we want items to support both.
 
 Finally we need a test application::
 
@@ -159,6 +161,8 @@ We can also get the interfaces in flattened form::
 
   >>> sorted(root['b'].rel.from_interfaces_flattened)
   [<InterfaceClass zope.app.container.interfaces.IContained>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,   
    <InterfaceClass __builtin__.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
@@ -166,6 +170,8 @@ We can also get the interfaces in flattened form::
    <InterfaceClass zope.interface.Interface>]
   >>> sorted(root['b'].rel.to_interfaces_flattened)
   [<InterfaceClass zope.app.container.interfaces.IContained>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
    <InterfaceClass __builtin__.IItem>, 
    <InterfaceClass zope.location.interfaces.ILocation>, 
@@ -194,7 +200,10 @@ applications a path would typically be a slash separated path, like
   ...   def path(self, obj):
   ...       return obj.__name__
   ...   def resolve(self, path):
-  ...       return root[path]
+  ...       try:
+  ...           return root[path]
+  ...       except KeyError:
+  ...           raise ValueError("Cannot resolve path %s" % path)
 
   >>> grok.testing.grok_component('ObjectPath', ObjectPath)
   True
@@ -382,6 +391,43 @@ from the catalog::
   >>> l[0].from_path
   u'b'
 
+Breaking a relation
+===================
+
+We have a relation from ``b`` to ``c`` right now::
+
+  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  [<z3c.relationfield.relation.RelationValue object at ...>]
+
+The relation isn't broken::
+  
+  >>> b.rel.isBroken()
+  False
+
+We are now going to break this relation by removing ``c``::
+
+  >>> del root['c']
+
+The relation is broken now::
+
+  >>> b.rel.isBroken()
+  True
+
+The original relation still has a ``to_path``::
+
+  >>> b.rel.to_path
+  u'c'
+
+It's broken however as there is no ``to_object``::
+
+  >>> b.rel.to_object is None
+  True
+
+The ``to_id`` is also gone::
+
+  >>> b.rel.to_id is None
+  True
+
 RelationList
 ============
 
@@ -492,3 +538,26 @@ And we will now see this new relation appear in the catalog::
   >>> after3 = sorted(catalog.findRelations({'to_id': a_id}))
   >>> len(after3) > len(after2) 
   True
+
+Broken temporary relations
+==========================
+
+Let's create another temporary relation, this time a broken one that
+cannot be resolved::
+
+  >>> root['e'] = Item()
+  >>> root['e'].rel = TemporaryRelationValue('nonexistent')
+
+Let's try realizing this relation::
+
+  >>> realize_relations(root['e'])
+
+We end up with a broken relation::
+  
+  >>> root['e'].rel.isBroken()
+  True
+
+It's pointing to the nonexistent path::
+
+  >>> root['e'].rel.to_path
+  'nonexistent'
