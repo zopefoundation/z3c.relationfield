@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.3.1 (unreleased)
+0.3.1 (2009-01-20)
 ==================
 
 * Introduce sensible sort order for relations, based on a
