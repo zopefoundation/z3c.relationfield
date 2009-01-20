@@ -1,10 +1,13 @@
 CHANGES
 *******
 
-0.4 (unreleased)
-================
+0.3.1 (unreleased)
+==================
 
-* ...
+* Introduce sensible sort order for relations, based on a
+  ``(from_attribute, from_path, to_path)`` tuple.
+
+* Relations will now never compare to ``None``. 
 
 0.3 (2009-01-19)
 ================

@@ -59,9 +59,12 @@ class RelationValue(Persistent):
 
     def __cmp__(self, other):
         if other is None:
-            return cmp(self.to_id, None)
-        return cmp(self.to_id, other.to_id)
+            return cmp(self._sort_key(), None)
+        return cmp(self._sort_key(), other._sort_key())
 
+    def _sort_key(self):
+        return (self.from_attribute, self.from_path, self.to_path)
+    
     def broken(self, to_path):
         self._broken_to_path = to_path
         self.to_id = None

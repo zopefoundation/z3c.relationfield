@@ -378,6 +378,27 @@ the other from the copy::
   >>> l[1].from_path
   u'b-2'
 
+Relations are sortable
+======================
+
+Relations are sorted by default on a combination of the relation name,
+the path of the object the relation is one and the path of the object
+the relation is pointing to.
+
+Let's query all relations availble right now and sort them::
+
+  >>> l = sorted(catalog.findRelations())
+  >>> len(l)
+  2
+  >>> l[0].from_attribute
+  'rel'
+  >>> l[1].from_attribute
+  'rel'
+  >>> l[0].from_path
+  u'b'
+  >>> l[1].from_path
+  u'b-2'
+
 Removing an object with relations
 =================================
 
@@ -427,6 +448,11 @@ The ``to_id`` is also gone::
 
   >>> b.rel.to_id is None
   True
+
+A broken relation isn't equal to ``None`` (this was a bug)::
+
+  >>> b.rel == None
+  False
 
 RelationList
 ============
