@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.3.2 (unreleased)
+0.3.2 (2009-01-21)
 ==================
 
 * When a relation is broken, properly re-catalog things.
