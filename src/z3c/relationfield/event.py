@@ -3,10 +3,12 @@ import grokcore.component as grok
 from zope.interface import providedBy
 from zope.schema import getFields
 from zope import component
+from zope.event import notify
 from zope.app.intid.interfaces import IIntIds, IIntIdRemovedEvent
 from zope.app.container.interfaces import (IObjectAddedEvent,
                                            IObjectRemovedEvent)
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.lifecycleevent import ObjectModifiedEvent
 
 from zc.relation.interfaces import ICatalog
 
@@ -70,7 +72,9 @@ def breakRelations(event):
     rels = list(catalog.findRelations({'to_id': intids.getId(obj)}))
     for rel in rels:
         rel.broken(rel.to_path)
-    
+        # we also need to update the relations for these objects
+        notify(ObjectModifiedEvent(rel.from_object))
+        
 def realize_relations(obj):
     """Given an object, convert any temporary relations on it to real ones.
     """

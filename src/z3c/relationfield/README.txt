@@ -420,6 +420,11 @@ We have a relation from ``b`` to ``c`` right now::
   >>> sorted(catalog.findRelations({'to_id': c_id})) 
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
+We have no broken relations::
+
+  >>> sorted(catalog.findRelations({'to_id': None})) 
+  []
+
 The relation isn't broken::
   
   >>> b.rel.isBroken()
@@ -448,6 +453,18 @@ The ``to_id`` is also gone::
 
   >>> b.rel.to_id is None
   True
+
+We cannot find the broken relation in the catalog this way as it's not
+pointing to ``c_id`` anymore::
+
+  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  []
+
+We can however find it by searching for relations that have a
+``to_id`` of ``None``::
+
+  >>> sorted(catalog.findRelations({'to_id': None})) 
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 A broken relation isn't equal to ``None`` (this was a bug)::
 

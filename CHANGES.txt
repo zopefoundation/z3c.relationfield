@@ -1,10 +1,10 @@
 CHANGES
 *******
 
-0.4 (unreleased)
-================
+0.3.2 (unreleased)
+==================
 
-* ...
+* When a relation is broken, properly re-catalog things.
 
 0.3.1 (2009-01-20)
 ==================
