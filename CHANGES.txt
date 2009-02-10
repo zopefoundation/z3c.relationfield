@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.4 (unreleased)
+0.4 (2009-02-10)
 ================
 
 * Introduce a ``RelationChoice`` field that behaves like
