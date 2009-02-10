@@ -25,10 +25,16 @@ class IHasRelations(IHasIncomingRelations, IHasOutgoingRelations):
     """
 
 class IRelation(IField):
-    pass
+    """Simple one to one relations.
+    """
+
+class IRelationChoice(IRelation):
+    """A one to one relation where a choice of target objects is available.
+    """
 
 class IRelationList(IList):
-    pass
+    """A one to many relation.
+    """
 
 class IRelationValue(Interface):
     """A relation between the parent object and another one.

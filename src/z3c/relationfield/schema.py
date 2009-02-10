@@ -3,11 +3,11 @@ import grokcore.component as grok
 from lxml import etree
 
 from zope.interface import implements
-from zope.schema import Field, List
+from zope.schema import Field, List, Choice
 
 from z3c.schema2xml import IXMLGenerator
 
-from z3c.relationfield.interfaces import IRelation, IRelationList
+from z3c.relationfield.interfaces import IRelation, IRelationChoice, IRelationList
 from z3c.relationfield.relation import TemporaryRelationValue
 
 class Relation(Field):
@@ -34,7 +34,10 @@ class RelationList(List):
     implements(IRelationList)
 
     value_type = Relation()
-    
+
+class RelationChoice(Choice):
+    implements(IRelationChoice)
+
 class RelationListGenerator(grok.Adapter):
     """Export a relation list to XML.
     """

@@ -218,6 +218,35 @@ We can also get the path of the object that is doing the pointing::
   >>> root['b'].rel.from_path
   u'b'
 
+Comparing and sorting relations
+===============================
+
+Let's create a bunch of ``RelationValue`` objects and compare them::
+
+  >>> rel_to_a = RelationValue(a_id)
+  >>> b_id = intids.getId(root['b'])
+  >>> rel_to_b = RelationValue(b_id)
+  >>> rel_to_a == rel_to_b
+  False
+
+Relations of course are equal to themselves::
+
+  >>> rel_to_a == rel_to_a
+  True
+
+A relation that is stored is equal to a relation that isn't stored yet::
+
+  >>> root['b'].rel == rel_to_a
+  True
+
+We can also sort relations::
+
+  >>> [(rel.from_path, rel.to_path) for rel in
+  ...  sorted([root['b'].rel, rel_to_a, rel_to_b])]
+  [('', u'a'), ('', u'b'), (u'b', u'a')]
+
+
+
 Relation queries
 ================
 
@@ -470,6 +499,41 @@ A broken relation isn't equal to ``None`` (this was a bug)::
 
   >>> b.rel == None
   False
+
+RelationChoice
+==============
+
+A ``RelationChoice`` field is much like an ordinary ``Relation`` field
+but can be used to render a special widget that allows a choice of
+selections.
+
+We will first demonstrate a ``RelationChoice`` field has the same effect
+as a ``Relation`` field itself::
+
+  >>> from z3c.relationfield import RelationChoice
+  >>> class IChoiceItem(Interface):
+  ...   rel = RelationChoice(title=u"Relation", values=[])
+  >>> class ChoiceItem(Persistent):
+  ...   implements(IChoiceItem, IHasRelations)
+  ...   def __init__(self):
+  ...     self.rel = None
+
+Let's create an object to point the relation to::
+
+  >>> root['some_object'] = Item()
+  >>> some_object_id = intids.getId(root['some_object'])
+
+And let's establish the relation::
+
+  >>> choice_item = ChoiceItem()
+  >>> choice_item.rel = RelationValue(some_object_id)
+  >>> root['choice_item'] = choice_item
+
+We can query for this relation now::
+
+  >>> l = sorted(catalog.findRelations({'to_id': some_object_id}))
+  >>> l
+  [<z3c.relationfield.relation.RelationValue object at ...>]
 
 RelationList
 ============

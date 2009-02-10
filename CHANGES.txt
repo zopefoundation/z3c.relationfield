@@ -4,7 +4,14 @@ CHANGES
 0.4 (unreleased)
 ================
 
-* ...
+* Introduce a ``RelationChoice`` field that behaves like
+  ``schema.Choice`` but tracks relations. In combination with a source
+  (such as created by ``RelationSourceFactory`` provided by
+  ``z3c.relationfieldui``) this can be used to create drop-down
+  selections for relations.
+
+* Clarify the way comparing and sorting of ``RelationValue`` objects is 
+  done in order to better support choice support.
 
 0.3.2 (2009-01-21)
 ==================

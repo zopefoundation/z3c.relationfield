@@ -57,6 +57,23 @@ class RelationValue(Persistent):
     def to_interfaces_flattened(self):
         return _interfaces_flattened(self.to_interfaces)
 
+    def __eq__(self, other):
+        if not isinstance(other, RelationValue):
+            return False
+        self_sort_key = self._sort_key()
+        other_sort_key = other._sort_key()
+        # if one of the relations we are comparing doesn't have a source
+        # yet, only compare targets. This is to make comparisons within
+        # ChoiceWidget work; a stored relation would otherwise not compare
+        # equal with a relation generated for presentation in the UI
+        if self_sort_key[0] is None or other_sort_key[0] is None:
+            return self_sort_key[-1] == other_sort_key[-1]
+        # otherwise do a full comparison
+        return self_sort_key == other_sort_key
+
+    def __neq__(self, other):
+        return not self.__eq__(other)
+
     def __cmp__(self, other):
         if other is None:
             return cmp(self._sort_key(), None)
