@@ -1,10 +1,12 @@
 CHANGES
 *******
 
-0.5 (unreleased)
-================
+0.4.1 (unreleased)
+==================
 
-* ...
+* Don't handle ``IObjectModified`` events for objects that do not yet
+  have a parent. There is no need to do so anyway, as these objects cannot
+  have outgoing relations indexed.
 
 0.4 (2009-02-10)
 ================

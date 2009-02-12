@@ -43,10 +43,15 @@ def removeRelations(obj, event):
 def updateRelations(obj, event):
     """Re-register relations, after they have been changed.
     """
-    catalog = component.getUtility(ICatalog)
-    intids = component.getUtility(IIntIds)
+    # if we do not yet have a parent, we ignore this modified event
+    # completely. The object will need to be added somewhere first
+    # before modification events will have an effect
+    if obj.__parent__ is None:
+        return
 
     # remove previous relations coming from id (now have been overwritten)
+    catalog = component.getUtility(ICatalog)
+    intids = component.getUtility(IIntIds)
     # have to activate query here with list() before unindexing them so we don't
     # get errors involving buckets changing size
     rels = list(catalog.findRelations({'from_id': intids.getId(obj)}))
