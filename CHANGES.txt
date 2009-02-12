@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.4.1 (unreleased)
+0.4.1 (2009-02-12)
 ==================
 
 * Don't handle ``IObjectModified`` events for objects that do not yet
