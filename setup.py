@@ -15,14 +15,14 @@ long_description = (
 
 setup(
     name='z3c.relationfield',
-    version='0.4.1dev',
+    version='0.5dev',
     description="A relation field framework for Zope 3.",
     long_description=long_description,
     classifiers=[],
     keywords='',
     author='Martijn Faassen',
     author_email='faassen@startifact.com',
-    license='',
+    license='ZPL 2.1',
     packages=find_packages('src'),
     package_dir={'': 'src'},
     namespace_packages=['z3c'],
