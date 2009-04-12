@@ -33,30 +33,38 @@ def removeRelations(obj, event):
 
     Any relation object on the object will be removed from the catalog.
     """
-    catalog = component.getUtility(ICatalog)
- 
+    catalog = component.queryUtility(ICatalog)
+    if catalog is None:
+        return
+
     for name, relation in _relations(obj):
         if relation is not None:
-            catalog.unindex(relation)
+            try:
+                catalog.unindex(relation)
+            except KeyError:
+                # The relation value has already been unindexed.
+                pass
 
 @grok.subscribe(IHasOutgoingRelations, IObjectModifiedEvent)
 def updateRelations(obj, event):
     """Re-register relations, after they have been changed.
     """
-    # if we do not yet have a parent, we ignore this modified event
-    # completely. The object will need to be added somewhere first
-    # before modification events will have an effect
-    if obj.__parent__ is None:
+    catalog = component.getUtility(ICatalog)
+    intids = component.getUtility(IIntIds)
+
+    # check that the object has an intid, otherwise there's nothing to be done
+    try:
+        obj_id = intids.getId(obj)
+    except KeyError:
+        # The object has not been added to the ZODB yet
         return
 
     # remove previous relations coming from id (now have been overwritten)
-    catalog = component.getUtility(ICatalog)
-    intids = component.getUtility(IIntIds)
     # have to activate query here with list() before unindexing them so we don't
     # get errors involving buckets changing size
-    rels = list(catalog.findRelations({'from_id': intids.getId(obj)}))
+    rels = list(catalog.findRelations({'from_id': obj_id}))
     for rel in rels:
-        catalog.unindex(rel)    
+        catalog.unindex(rel)
 
     # add new relations
     addRelations(obj, event)
@@ -70,16 +78,23 @@ def breakRelations(event):
     obj = event.object
     if not IHasIncomingRelations.providedBy(obj):
         return
-    catalog = component.getUtility(ICatalog)
-    intids = component.getUtility(IIntIds)
+    catalog = component.queryUtility(ICatalog)
+    intids = component.queryUtility(IIntIds)
+    if catalog is None or intids is None:
+        return
 
     # find all relations that point to us
+    try:
+        obj_id = intids.getId(obj)
+    except KeyError:
+        # our intid was unregistered already
+        return
     rels = list(catalog.findRelations({'to_id': intids.getId(obj)}))
     for rel in rels:
         rel.broken(rel.to_path)
         # we also need to update the relations for these objects
         notify(ObjectModifiedEvent(rel.from_object))
-        
+
 def realize_relations(obj):
     """Given an object, convert any temporary relations on it to real ones.
     """
