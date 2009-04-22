@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 import sys, os
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    return open(os.path.join(*rnames)).read()
 
 long_description = (
     read('src', 'z3c', 'relationfield', 'README.txt')
