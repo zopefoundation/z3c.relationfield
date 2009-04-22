@@ -49,8 +49,11 @@ def removeRelations(obj, event):
 def updateRelations(obj, event):
     """Re-register relations, after they have been changed.
     """
-    catalog = component.getUtility(ICatalog)
-    intids = component.getUtility(IIntIds)
+    catalog = component.queryUtility(ICatalog)
+    intids = component.queryUtility(IIntIds)
+
+    if catalog is None or intids is None:
+        return
 
     # check that the object has an intid, otherwise there's nothing to be done
     try:

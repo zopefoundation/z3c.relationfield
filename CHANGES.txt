@@ -4,7 +4,9 @@ CHANGES
 0.5 (unreleased)
 ================
 
-* ...
+* Prevent the event failures from failing when utilities are missing or when
+  objects do not implement IContained.
+
 
 0.4.1 (2009-02-12)
 ==================
