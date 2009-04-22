@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.5 (unreleased)
+0.4.2 (unreleased)
 ================
 
 * Prevent the event failures from failing when utilities are missing or when
