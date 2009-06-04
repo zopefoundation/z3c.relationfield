@@ -1,9 +1,10 @@
 CHANGES
 *******
 
-0.5 (unreleased)
-================
+0.4.3 (unreleased)
+==================
 
+* Add missing dependency for lxml.
 
 0.4.2 (2009-04-22)
 ==================
