@@ -4,9 +4,10 @@ from zope.interface import providedBy
 from zope.schema import getFields
 from zope import component
 from zope.event import notify
-from zope.app.intid.interfaces import IIntIds, IIntIdRemovedEvent
-from zope.app.container.interfaces import (IObjectAddedEvent,
-                                           IObjectRemovedEvent)
+from zope.app.intid.interfaces import (IIntIds,
+                                       IIntIdRemovedEvent,
+                                       IIntIdAddedEvent)
+from zope.app.container.interfaces import IObjectRemovedEvent
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.lifecycleevent import ObjectModifiedEvent
 
@@ -18,7 +19,8 @@ from z3c.relationfield.interfaces import (IHasOutgoingRelations,
                                           IRelationValue,
                                           ITemporaryRelationValue)
 
-@grok.subscribe(IHasOutgoingRelations, IObjectAddedEvent)
+# five.intid dispatches an object event for efficiency
+@grok.subscribe(IHasOutgoingRelations, IIntIdAddedEvent)
 def addRelations(obj, event):
     """Register relations.
 
@@ -26,6 +28,17 @@ def addRelations(obj, event):
     """
     for name, relation in _relations(obj):
          _setRelation(obj, name, relation)
+
+# zope.app.intid dispatches a normal event, so we need to check that the object
+# has relations.  This adds some overhead to every intid registration,
+# which would not be needed if an object event were fired.
+@grok.subscribe(IIntIdAddedEvent)
+def addRelationsEventOnly(event):
+    obj = event.object
+    if not IHasOutgoingRelations.providedBy(obj):
+        return
+    addRelations(obj, event)
+
 
 @grok.subscribe(IHasOutgoingRelations, IObjectRemovedEvent)
 def removeRelations(obj, event):

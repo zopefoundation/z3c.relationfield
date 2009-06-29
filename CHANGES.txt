@@ -4,6 +4,8 @@ CHANGES
 0.5 (unreleased)
 ==================
 
+* Subscribe to IIntIdAddedEvent instead of IObjectAddedEvent to prevent
+  errors due to subscriber ordering.
 
 
 0.4.3 (2009-06-04)
