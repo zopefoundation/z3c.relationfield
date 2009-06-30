@@ -4,6 +4,11 @@ CHANGES
 0.5 (unreleased)
 ==================
 
+* Move lxml and schema2xml dependencies to an [xml] extra so that people can
+  use this package without having to install lxml, which still causes issues
+  on some platforms. If z3c.schema2xml and lxml are not importable, the
+  relevant adapters will not be defined, but everything else will still work.
+
 * Subscribe to IIntIdAddedEvent instead of IObjectAddedEvent to prevent
   errors due to subscriber ordering.
 
