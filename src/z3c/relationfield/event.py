@@ -19,8 +19,6 @@ from z3c.relationfield.interfaces import (IHasOutgoingRelations,
                                           IRelationValue,
                                           ITemporaryRelationValue)
 
-# five.intid dispatches an object event for efficiency
-@grok.subscribe(IHasOutgoingRelations, IIntIdAddedEvent)
 def addRelations(obj, event):
     """Register relations.
 
@@ -29,9 +27,10 @@ def addRelations(obj, event):
     for name, relation in _relations(obj):
          _setRelation(obj, name, relation)
 
-# zope.app.intid dispatches a normal event, so we need to check that the object
-# has relations.  This adds some overhead to every intid registration,
-# which would not be needed if an object event were fired.
+# zope.app.intid dispatches a normal event, so we need to check that
+# the object has relations.  This adds a little overhead to every
+# intid registration, which would not be needed if an object event
+# were dispatched in zope.app.intid.
 @grok.subscribe(IIntIdAddedEvent)
 def addRelationsEventOnly(event):
     obj = event.object
