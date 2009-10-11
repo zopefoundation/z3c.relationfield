@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.6 (2009-10-08)
+0.6 (2009-10-11)
 ================
 
 * Ensure that the value_type of a RelationList is not overwritten to be 'None'
