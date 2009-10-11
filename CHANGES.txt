@@ -1,11 +1,10 @@
 CHANGES
 *******
 
-0.7 (unreleased)
+0.5.1 (2009-10-11)
 ================
 
-- Nothing changed yet.
-
+- Fixes broken release
 
 0.6 (2009-10-11)
 ================
