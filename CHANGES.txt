@@ -1,8 +1,14 @@
 CHANGES
 *******
 
+0.6 (2009-10-08)
+================
+
+* Ensure that the value_type of a RelationList is not overwritten to be 'None'
+  when the field is constructed.
+
 0.5 (2009-06-30)
-==================
+================
 
 * Move lxml and schema2xml dependencies to an [xml] extra so that people can
   use this package without having to install lxml, which still causes issues
