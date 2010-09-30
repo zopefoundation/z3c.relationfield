@@ -1,10 +1,19 @@
 CHANGES
 *******
 
-0.5.1 (2009-10-11)
+0.7 (unreleased)
 ================
 
-- Fixes broken release
+* Updated test setup and test to run with current versions of dependent
+  packages, thus running with Python 2.6, too.
+
+* Added missing (test) dependencies.
+
+
+0.6.1 (2009-10-11)
+==================
+
+* Fixes broken release.
 
 0.6 (2009-10-11)
 ================
@@ -53,7 +62,7 @@ CHANGES
   ``z3c.relationfieldui``) this can be used to create drop-down
   selections for relations.
 
-* Clarify the way comparing and sorting of ``RelationValue`` objects is 
+* Clarify the way comparing and sorting of ``RelationValue`` objects is
   done in order to better support choice support.
 
 0.3.2 (2009-01-21)
@@ -67,14 +76,14 @@ CHANGES
 * Introduce sensible sort order for relations, based on a
   ``(from_attribute, from_path, to_path)`` tuple.
 
-* Relations will now never compare to ``None``. 
+* Relations will now never compare to ``None``.
 
 0.3 (2009-01-19)
 ================
 
 * Introduce two new interfaces: ``IHasOutgoingRelations`` and
   ``IHasIncomingRelations``. ``IHasOutgoingRelations`` should be provided
-  by objects that actually have relations set on them, so that 
+  by objects that actually have relations set on them, so that
   they can be properly cataloged. ``IHasIncomingRelations`` should be
   set on objects that can be related to, so that broken relations
   can be properly tracked. ``IHasRelations`` now extends both,

@@ -38,6 +38,8 @@ setup(
         'zc.relation >= 1.0',
         # for tests
         'zope.app.zcmlfiles',
+        'zope.app.testing',
+        'zope.app.keyreference',
         'zope.securitypolicy',
         ],
     extras_require = {

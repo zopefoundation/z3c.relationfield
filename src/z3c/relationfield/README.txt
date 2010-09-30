@@ -70,7 +70,7 @@ in the ZODB::
 
   >>> from zope.app.intid import IntIds
   >>> from zope.app.intid.interfaces import IIntIds
-  >>> root['intids'] = intids = IntIds() 
+  >>> root['intids'] = intids = IntIds()
   >>> sm = root.getSiteManager()
   >>> sm.registerUtility(intids, provided=IIntIds)
 
@@ -134,7 +134,7 @@ of setting this::
   >>> from_object = root['b'].rel.from_object
   >>> from_object.__name__
   u'b'
- 
+
 This object is also known as the ``__parent__``; again the event
 sytem took care of setting this::
 
@@ -145,37 +145,39 @@ sytem took care of setting this::
 The relation also knows about the interfaces of both the pointing object
 and the object that is being pointed at::
 
-  >>> sorted(root['b'].rel.from_interfaces)
-  [<InterfaceClass zope.app.container.interfaces.IContained>,
-   <InterfaceClass z3c.relationfield.interfaces.IHasRelations>, 
-   <InterfaceClass __builtin__.IItem>, 
+  >>> from pprint import pprint
+  >>> pprint(sorted(root['b'].rel.from_interfaces))
+  [<InterfaceClass zope.location.interfaces.IContained>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
+   <InterfaceClass __builtin__.IItem>,
    <InterfaceClass persistent.interfaces.IPersistent>]
 
-  >>> sorted(root['b'].rel.to_interfaces)
-  [<InterfaceClass zope.app.container.interfaces.IContained>, 
+  >>> pprint(sorted(root['b'].rel.to_interfaces))
+  [<InterfaceClass zope.location.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass __builtin__.IItem>, 
+   <InterfaceClass __builtin__.IItem>,
    <InterfaceClass persistent.interfaces.IPersistent>]
 
 We can also get the interfaces in flattened form::
 
-  >>> sorted(root['b'].rel.from_interfaces_flattened)
-  [<InterfaceClass zope.app.container.interfaces.IContained>,
-   <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
-   <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
-   <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,   
-   <InterfaceClass __builtin__.IItem>, 
-   <InterfaceClass zope.location.interfaces.ILocation>, 
-   <InterfaceClass persistent.interfaces.IPersistent>, 
-   <InterfaceClass zope.interface.Interface>]
-  >>> sorted(root['b'].rel.to_interfaces_flattened)
-  [<InterfaceClass zope.app.container.interfaces.IContained>,
+  >>> pprint(sorted(root['b'].rel.from_interfaces_flattened))
+  [<InterfaceClass zope.location.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass __builtin__.IItem>, 
-   <InterfaceClass zope.location.interfaces.ILocation>, 
-   <InterfaceClass persistent.interfaces.IPersistent>, 
+   <InterfaceClass __builtin__.IItem>,
+   <InterfaceClass zope.location.interfaces.ILocation>,
+   <InterfaceClass persistent.interfaces.IPersistent>,
+   <InterfaceClass zope.interface.Interface>]
+
+  >>> pprint(sorted(root['b'].rel.to_interfaces_flattened))
+  [<InterfaceClass zope.location.interfaces.IContained>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
+   <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
+   <InterfaceClass __builtin__.IItem>,
+   <InterfaceClass zope.location.interfaces.ILocation>,
+   <InterfaceClass persistent.interfaces.IPersistent>,
    <InterfaceClass zope.interface.Interface>]
 
 Paths
@@ -280,7 +282,7 @@ relations have been set up::
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['b'])}))
   []
- 
+
 We can also issue more specific queries, restricting it on the
 attribute used for the relation field and the interfaces provided by
 the related objects. Here we look for all relations between ``b`` and
@@ -324,12 +326,12 @@ Let's create a new object ``c``::
 
 Nothing points to ``c`` yet::
 
-  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> sorted(catalog.findRelations({'to_id': c_id}))
   []
 
 We currently have a relation from ``b`` to ``a``::
 
-  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])})) 
+  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We can change the relation to point at a new object ``c``::
@@ -345,12 +347,12 @@ have changed the relations::
 
 We should find now a single relation from ``b`` to ``c``::
 
-  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
 The relation to ``a`` should now be gone::
 
-  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])})) 
+  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   []
 
 Removing the relation
@@ -358,7 +360,7 @@ Removing the relation
 
 We have a relation from ``b`` to ``c`` right now::
 
-  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We can clean up an existing relation from ``b`` to ``c`` by setting it
@@ -374,7 +376,7 @@ have changed the relations::
 Setting the relation on ``b`` to ``None`` should remove that relation
 from the relation catalog, so we shouldn't be able to find it anymore::
 
-  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['c'])})) 
+  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['c'])}))
   []
 
 Let's reestablish the removed relation::
@@ -382,9 +384,9 @@ Let's reestablish the removed relation::
   >>> root['b'].rel = RelationValue(c_id)
   >>> notify(ObjectModifiedEvent(root['b']))
 
-  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
-          
+
 Copying an object with relations
 ================================
 
@@ -399,7 +401,7 @@ Let's copy an object with relations::
 Two relations to ``c`` can now be found, one from the original, and
 the other from the copy::
 
-  >>> l = sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> l = sorted(catalog.findRelations({'to_id': c_id}))
   >>> len(l)
   2
   >>> l[0].from_path
@@ -446,16 +448,16 @@ Breaking a relation
 
 We have a relation from ``b`` to ``c`` right now::
 
-  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We have no broken relations::
 
-  >>> sorted(catalog.findRelations({'to_id': None})) 
+  >>> sorted(catalog.findRelations({'to_id': None}))
   []
 
 The relation isn't broken::
-  
+
   >>> b.rel.isBroken()
   False
 
@@ -486,13 +488,13 @@ The ``to_id`` is also gone::
 We cannot find the broken relation in the catalog this way as it's not
 pointing to ``c_id`` anymore::
 
-  >>> sorted(catalog.findRelations({'to_id': c_id})) 
+  >>> sorted(catalog.findRelations({'to_id': c_id}))
   []
 
 We can however find it by searching for relations that have a
 ``to_id`` of ``None``::
 
-  >>> sorted(catalog.findRelations({'to_id': None})) 
+  >>> sorted(catalog.findRelations({'to_id': None}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
 A broken relation isn't equal to ``None`` (this was a bug)::
@@ -626,7 +628,7 @@ The relation will also now show up in the catalog::
   True
 
 Temporary relation values also work with ``RelationList`` objects::
-  
+
   >>> root['multi_temp'] = MultiItem()
   >>> root['multi_temp'].rel = [TemporaryRelationValue('a')]
 
@@ -639,11 +641,11 @@ Again we can see the real relation object when we look at it::
 
   >>> root['multi_temp'].rel
   [<z3c.relationfield.relation.RelationValue object at ...>]
- 
+
 And we will now see this new relation appear in the catalog::
 
   >>> after3 = sorted(catalog.findRelations({'to_id': a_id}))
-  >>> len(after3) > len(after2) 
+  >>> len(after3) > len(after2)
   True
 
 Broken temporary relations
@@ -660,7 +662,7 @@ Let's try realizing this relation::
   >>> realize_relations(root['e'])
 
 We end up with a broken relation::
-  
+
   >>> root['e'].rel.isBroken()
   True
 
