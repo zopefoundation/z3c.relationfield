@@ -1,5 +1,5 @@
 from setuptools import setup, find_packages
-import sys, os
+import os
 
 def read(*rnames):
     return open(os.path.join(*rnames)).read()
@@ -36,13 +36,14 @@ setup(
         'zope.app.container',
         'z3c.objpath',
         'zc.relation >= 1.0',
-        # for tests
-        'zope.app.zcmlfiles',
-        'zope.app.testing',
-        'zope.app.keyreference',
-        'zope.securitypolicy',
         ],
     extras_require = {
+        'test': [
+            'zope.app.zcmlfiles',
+            'zope.app.testing',
+            'zope.app.keyreference',
+            'zope.securitypolicy',
+        ],
         'xml':  ['z3c.schema2xml >= 1.0',
                  'lxml'],
       },
