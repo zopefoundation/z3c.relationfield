@@ -71,7 +71,7 @@ class RelationValue(Persistent):
         # otherwise do a full comparison
         return self_sort_key == other_sort_key
 
-    def __neq__(self, other):
+    def __ne__(self, other):
         return not self.__eq__(other)
 
     def __cmp__(self, other):

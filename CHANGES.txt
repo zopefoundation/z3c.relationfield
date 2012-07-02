@@ -9,6 +9,9 @@ CHANGES
 
 * Added missing (test) dependencies.
 
+* Rename __neq__ method to __ne__ since __neq__ is not the right builtin
+  name for != handlers.
+
 
 0.6.1 (2009-10-11)
 ==================
