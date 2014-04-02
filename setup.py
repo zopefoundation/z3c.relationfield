@@ -1,6 +1,7 @@
 from setuptools import setup, find_packages
 import os
 
+
 def read(*rnames):
     return open(os.path.join(*rnames)).read()
 
@@ -11,7 +12,7 @@ long_description = (
     + '\n' +
     'Download\n'
     '********\n'
-    )
+)
 
 setup(
     name='z3c.relationfield',
@@ -35,16 +36,16 @@ setup(
         'zope.app.container',
         'z3c.objpath',
         'zc.relation >= 1.0',
-        ],
-    extras_require = {
+    ],
+    extras_require={
         'test': [
             'zope.app.zcmlfiles',
             'zope.app.testing',
             'zope.app.keyreference',
             'zope.securitypolicy',
         ],
-        'xml':  ['z3c.schema2xml >= 1.0',
-                 'lxml'],
-      },
+        'xml': ['z3c.schema2xml >= 1.0',
+                'lxml'],
+    },
     entry_points={},
-    )
+)

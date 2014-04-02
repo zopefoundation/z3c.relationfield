@@ -5,19 +5,21 @@ from z3c.relationfield.testing import (
     unregister_fake_intid,
     unregister_fake_catalog,
     MockContent,
-    )
+)
 from z3c.relationfield import event
 from z3c.relationfield import RelationList, Relation
 from zope.component.interfaces import ObjectEvent
 from zope.component.interfaces import ComponentLookupError
 
+
 class FieldTests(TestCase):
     """Unit tests for fields
     """
-    
+
     def test_list_value_type(self):
         f = RelationList(title=u"Test")
         self.failUnless(isinstance(f.value_type, Relation))
+
 
 class EventTests(TestCase):
     """Unit tests for the relation field event handlers.  The event handlers
@@ -71,8 +73,9 @@ class EventTests(TestCase):
         except (KeyError, AttributeError):
             self.fail("updateRelations fails with unregistered object")
 
+
 def test_suite():
-    suite=TestSuite()
+    suite = TestSuite()
     suite.addTest(makeSuite(EventTests))
     suite.addTest(makeSuite(FieldTests))
     return suite
