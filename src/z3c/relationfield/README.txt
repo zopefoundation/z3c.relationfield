@@ -195,20 +195,29 @@ just the name of the object we point to. In more sophisticated
 applications a path would typically be a slash separated path, like
 ``/foo/bar``::
 
-  >>> import grokcore.component as grok
+  >>> from zope.interface import Interface
+  >>> from zope.interface import implements
   >>> from z3c.objpath.interfaces import IObjectPath
-  >>> class ObjectPath(grok.GlobalUtility):
-  ...   grok.provides(IObjectPath)
-  ...   def path(self, obj):
-  ...       return obj.__name__
-  ...   def resolve(self, path):
-  ...       try:
-  ...           return root[path]
-  ...       except KeyError:
-  ...           raise ValueError("Cannot resolve path %s" % path)
 
-  >>> grok.testing.grok_component('ObjectPath', ObjectPath)
-  True
+
+  >>> class ObjectPath(object):
+  ...
+  ...     implements(IObjectPath)
+  ...
+  ...     def path(self, obj):
+  ...         return obj.__name__
+  ...     def resolve(self, path):
+  ...         try:
+  ...             return root[path]
+  ...         except KeyError:
+  ...             raise ValueError("Cannot resolve path %s" % path)
+
+  >>> from zope.component import getGlobalSiteManager
+  >>> gsm = getGlobalSiteManager()
+
+  >>> op = ObjectPath()
+  >>> gsm.registerUtility(op)
+
 
 After this, we can get the path of the object the relation points to::
 
