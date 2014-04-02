@@ -7,7 +7,7 @@ from z3c.relationfield.interfaces import IRelationValue
 from z3c.relationfield.interfaces import ITemporaryRelationValue
 from zc.relation.interfaces import ICatalog
 from zope import component
-from zope.app.intid.interfaces import IIntIds
+from zope.intid.interfaces import IIntIds
 from zope.event import notify
 from zope.interface import providedBy
 from zope.lifecycleevent import ObjectModifiedEvent

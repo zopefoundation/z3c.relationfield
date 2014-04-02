@@ -1,28 +1,26 @@
 <configure
   xmlns="http://namespaces.zope.org/zope"
-  xmlns:zcml="http://namespaces.zope.org/xml">
-
-  <include file="ftesting.zcml" />
+  xmlns:zcml="http://namespaces.zope.org/zcml">
 
   <subscriber
-    for="zope.app.intid.interfaces.IIntIdAddedEvent"
+    for="zope.intid.interfaces.IIntIdAddedEvent"
     handler=".event.addRelationsEventOnly"
     />
 
   <subscriber
-    for="zope.app.intid.interfaces.IHasOutgoingRelations
-         zope.app.intid.interfaces.IObjectRemovedEvent"
+    for="z3c.relationfield.interfaces.IHasOutgoingRelations
+         zope.app.container.interfaces.IObjectRemovedEvent"
     handler=".event.removeRelations"
     />
 
   <subscriber
-    for="zope.app.intid.interfaces.IHasOutgoingRelations
-         zope.app.intid.interfaces.IObjectModifiedEvent"
+    for="z3c.relationfield.interfaces.IHasOutgoingRelations
+         zope.lifecycleevent.IObjectModifiedEvent"
     handler=".event.updateRelations"
     />
 
   <subscriber
-    for="zope.app.intid.interfaces.IIntIdRemovedEvent"
+    for="zope.intid.interfaces.IIntIdRemovedEvent"
     handler=".event.breakRelations"
     />
 

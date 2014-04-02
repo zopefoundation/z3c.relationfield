@@ -3,9 +3,10 @@ from z3c.objpath.interfaces import IObjectPath
 from z3c.relationfield.interfaces import IRelationValue
 from z3c.relationfield.interfaces import ITemporaryRelationValue
 from zope import component
-from zope.app.intid.interfaces import IIntIds
-from zope.interface import implementer
-from zope.interface import implements, providedBy, Declaration
+from zope.intid.interfaces import IIntIds
+from zope.interface import Declaration
+from zope.interface import implements
+from zope.interface import providedBy
 
 
 class RelationValue(Persistent):
@@ -88,13 +89,13 @@ class RelationValue(Persistent):
         return self.to_id is None
 
 
-@implementer(ITemporaryRelationValue)
 class TemporaryRelationValue(Persistent):
     """A relation that isn't fully formed yet.
 
     It needs to be finalized afterwards, when we are sure all potential
     target objects exist.
     """
+    implements(ITemporaryRelationValue)
 
     def __init__(self, to_path):
         self.to_path = to_path
