@@ -1,27 +1,25 @@
-import grokcore.component as grok
-
 from persistent import Persistent
-from zope.interface import implements, providedBy, Declaration
+from z3c.objpath.interfaces import IObjectPath
+from z3c.relationfield.interfaces import IRelationValue
+from z3c.relationfield.interfaces import ITemporaryRelationValue
 from zope import component
 from zope.app.intid.interfaces import IIntIds
+from zope.interface import implementer
+from zope.interface import implements, providedBy, Declaration
 
-from z3c.objpath.interfaces import IObjectPath
-
-from z3c.relationfield.interfaces import (IRelationValue,
-                                          ITemporaryRelationValue)
 
 class RelationValue(Persistent):
     implements(IRelationValue)
 
     _broken_to_path = None
-    
+
     def __init__(self, to_id):
         self.to_id = to_id
         # these will be set automatically by events
         self.from_object = None
         self.__parent__ = None
         self.from_attribute = None
-    
+
     @property
     def from_id(self):
         intids = component.getUtility(IIntIds)
@@ -38,7 +36,7 @@ class RelationValue(Persistent):
     @property
     def from_interfaces_flattened(self):
         return _interfaces_flattened(self.from_interfaces)
-        
+
     @property
     def to_object(self):
         return _object(self.to_id)
@@ -81,7 +79,7 @@ class RelationValue(Persistent):
 
     def _sort_key(self):
         return (self.from_attribute, self.from_path, self.to_path)
-    
+
     def broken(self, to_path):
         self._broken_to_path = to_path
         self.to_id = None
@@ -89,20 +87,22 @@ class RelationValue(Persistent):
     def isBroken(self):
         return self.to_id is None
 
+
+@implementer(ITemporaryRelationValue)
 class TemporaryRelationValue(Persistent):
     """A relation that isn't fully formed yet.
 
     It needs to be finalized afterwards, when we are sure all potential
     target objects exist.
     """
-    grok.implements(ITemporaryRelationValue)
-    
+
     def __init__(self, to_path):
         self.to_path = to_path
 
     def convert(self):
         return create_relation(self.to_path)
-    
+
+
 def _object(id):
     if id is None:
         return None
@@ -115,14 +115,17 @@ def _object(id):
         # be caught and the relation should be adjusted that way.
         return None
 
+
 def _path(obj):
     if obj is None:
         return ''
     object_path = component.getUtility(IObjectPath)
     return object_path.path(obj)
 
+
 def _interfaces_flattened(interfaces):
     return Declaration(*interfaces).flattened()
+
 
 def create_relation(to_path):
     """Create a relation to a particular path.

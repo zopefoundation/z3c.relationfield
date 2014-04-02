@@ -4,7 +4,8 @@ CHANGES
 0.6.3 (unreleased)
 ==================
 
-- Nothing changed yet.
+* Remove dependency on grok.
+  [pbauer, jensens]
 
 
 0.6.2 (2012-12-06)

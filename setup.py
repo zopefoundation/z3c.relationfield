@@ -31,7 +31,6 @@ setup(
     install_requires=[
         'setuptools',
         'ZODB3',
-        'grokcore.component',
         'zope.app.intid',
         'zope.app.container',
         'z3c.objpath',

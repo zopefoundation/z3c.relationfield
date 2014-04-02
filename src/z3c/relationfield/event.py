@@ -1,23 +1,18 @@
-import grokcore.component as grok
-
-from zope.interface import providedBy
-from zope.schema import getFields
-from zope import component
-from zope.event import notify
-from zope.app.intid.interfaces import (IIntIds,
-                                       IIntIdRemovedEvent,
-                                       IIntIdAddedEvent)
-from zope.app.container.interfaces import IObjectRemovedEvent
-from zope.lifecycleevent.interfaces import IObjectModifiedEvent
-from zope.lifecycleevent import ObjectModifiedEvent
-
+# -*- coding: UTF-8 -*-
+from z3c.relationfield.interfaces import IHasIncomingRelations
+from z3c.relationfield.interfaces import IHasOutgoingRelations
+from z3c.relationfield.interfaces import IRelation
+from z3c.relationfield.interfaces import IRelationList
+from z3c.relationfield.interfaces import IRelationValue
+from z3c.relationfield.interfaces import ITemporaryRelationValue
 from zc.relation.interfaces import ICatalog
+from zope import component
+from zope.app.intid.interfaces import IIntIds
+from zope.event import notify
+from zope.interface import providedBy
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema import getFields
 
-from z3c.relationfield.interfaces import (IHasOutgoingRelations,
-                                          IHasIncomingRelations,
-                                          IRelation, IRelationList,
-                                          IRelationValue,
-                                          ITemporaryRelationValue)
 
 def addRelations(obj, event):
     """Register relations.
@@ -25,13 +20,13 @@ def addRelations(obj, event):
     Any relation object on the object will be added.
     """
     for name, relation in _relations(obj):
-         _setRelation(obj, name, relation)
+        _setRelation(obj, name, relation)
+
 
 # zope.app.intid dispatches a normal event, so we need to check that
 # the object has relations.  This adds a little overhead to every
 # intid registration, which would not be needed if an object event
 # were dispatched in zope.app.intid.
-@grok.subscribe(IIntIdAddedEvent)
 def addRelationsEventOnly(event):
     obj = event.object
     if not IHasOutgoingRelations.providedBy(obj):
@@ -39,7 +34,6 @@ def addRelationsEventOnly(event):
     addRelations(obj, event)
 
 
-@grok.subscribe(IHasOutgoingRelations, IObjectRemovedEvent)
 def removeRelations(obj, event):
     """Remove relations.
 
@@ -57,7 +51,7 @@ def removeRelations(obj, event):
                 # The relation value has already been unindexed.
                 pass
 
-@grok.subscribe(IHasOutgoingRelations, IObjectModifiedEvent)
+
 def updateRelations(obj, event):
     """Re-register relations, after they have been changed.
     """
@@ -84,7 +78,7 @@ def updateRelations(obj, event):
     # add new relations
     addRelations(obj, event)
 
-@grok.subscribe(IIntIdRemovedEvent)
+
 def breakRelations(event):
     """Break relations on any object pointing to us.
 
@@ -110,6 +104,7 @@ def breakRelations(event):
         # we also need to update the relations for these objects
         notify(ObjectModifiedEvent(rel.from_object))
 
+
 def realize_relations(obj):
     """Given an object, convert any temporary relations on it to real ones.
     """
@@ -121,6 +116,7 @@ def realize_relations(obj):
             else:
                 # relation list
                 getattr(obj, name)[index] = relation.convert()
+
 
 def _setRelation(obj, name, value):
     """Set a relation on an object.
@@ -143,6 +139,7 @@ def _setRelation(obj, name, value):
     catalog = component.getUtility(ICatalog)
     catalog.index_doc(id, value)
 
+
 def _relations(obj):
     """Given an object, return tuples of name, relation value.
 
@@ -151,6 +148,7 @@ def _relations(obj):
     for name, index, relation in _potential_relations(obj):
         if IRelationValue.providedBy(relation):
             yield name, relation
+
 
 def _potential_relations(obj):
     """Given an object return tuples of name, index, relation value.

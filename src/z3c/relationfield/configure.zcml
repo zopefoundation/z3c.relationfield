@@ -1,10 +1,36 @@
 <configure
   xmlns="http://namespaces.zope.org/zope"
-  xmlns:grok="http://namespaces.zope.org/grok">
+  xmlns:zcml="http://namespaces.zope.org/xml">
 
-  <include package="grokcore.component" file="meta.zcml" />
+  <include file="ftesting.zcml" />
 
-  <grok:grok package="."/>
+  <subscriber
+    for="zope.app.intid.interfaces.IIntIdAddedEvent"
+    handler=".event.addRelationsEventOnly"
+    />
 
-  
+  <subscriber
+    for="zope.app.intid.interfaces.IHasOutgoingRelations
+         zope.app.intid.interfaces.IObjectRemovedEvent"
+    handler=".event.removeRelations"
+    />
+
+  <subscriber
+    for="zope.app.intid.interfaces.IHasOutgoingRelations
+         zope.app.intid.interfaces.IObjectModifiedEvent"
+    handler=".event.updateRelations"
+    />
+
+  <subscriber
+    for="zope.app.intid.interfaces.IIntIdRemovedEvent"
+    handler=".event.breakRelations"
+    />
+
+  <configure zcml:condition="installed z3c.schema2xml">
+
+    <adapter factory=".xml.RelationListGenerator" />
+    <adapter factory=".xml.RelationGenerator" />
+
+  </configure>
+
 </configure>
