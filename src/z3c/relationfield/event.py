@@ -23,10 +23,10 @@ def addRelations(obj, event):
         _setRelation(obj, name, relation)
 
 
-# zope.app.intid dispatches a normal event, so we need to check that
+# zope.intid dispatches a normal event, so we need to check that
 # the object has relations.  This adds a little overhead to every
 # intid registration, which would not be needed if an object event
-# were dispatched in zope.app.intid.
+# were dispatched in zope.intid.
 def addRelationsEventOnly(event):
     obj = event.object
     if not IHasOutgoingRelations.providedBy(obj):

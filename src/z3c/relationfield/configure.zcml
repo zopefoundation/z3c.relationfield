@@ -9,7 +9,7 @@
 
   <subscriber
     for="z3c.relationfield.interfaces.IHasOutgoingRelations
-         zope.app.container.interfaces.IObjectRemovedEvent"
+         zope.lifecycleevent.interfaces.IObjectRemovedEvent"
     handler=".event.removeRelations"
     />
 

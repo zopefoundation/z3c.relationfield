@@ -4,14 +4,14 @@
    package="z3c.relationfield"
    >
 
-  <include package="zope.app.zcmlfiles" file="meta.zcml" />
-  <include package="zope.securitypolicy" file="meta.zcml" />
+  <include package="zope.component" />
+  <include package="zope.security" />
+  <include package="zope.site" />
+  <include package="zope.container" />
+  <include package="zope.copypastemove" />
 
-  <include package="zope.app.zcmlfiles" />
-  <include package="zope.app.authentication" />
-  <include package="zope.app.keyreference" />
-  <include package="zope.app.intid" />
-
+  <include package="zope.keyreference" />
+  <include package="zope.intid" />
   <include package="z3c.relationfield" />
 
 </configure>

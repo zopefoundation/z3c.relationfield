@@ -1,22 +1,48 @@
-from z3c.relationfield.testing import FunctionalLayer
-from zope.app.testing.functional import FunctionalDocFileSuite
-from zope.app.testing.setup import setUpTestAsModule
-from zope.app.testing.setup import tearDownTestAsModule
-
+from zope.component.testlayer import ZCMLFileLayer
+import doctest
+import sys
 import unittest
 
 
+# Evil hack to make pickling work with classes defined in doc tests
+class NoCopyDict(dict):
+    def copy(self):
+        return self
+
+
+class FakeModule:
+    """A fake module."""
+
+    def __init__(self, dict):
+        self.__dict = dict
+
+    def __getattr__(self, name):
+        try:
+            return self.__dict[name]
+        except KeyError:
+            raise AttributeError(name)
+
+
 def setUp(test):
-    setUpTestAsModule(test, name='__builtin__')
+    test.globs['__name__'] = '__builtin__'
+    test.globs = NoCopyDict(test.globs)
+    sys.modules['__builtin__'] = FakeModule(test.globs)
+
+
+def tearDown(test):
+    del sys.modules['__builtin__']
+    test.globs.clear()
 
 
 def test_suite():
     globs = {}
-    readme = FunctionalDocFileSuite(
+    readme = doctest.DocFileSuite(
         'README.txt',
         globs=globs,
         setUp=setUp,
-        tearDown=tearDownTestAsModule,
+        tearDown=tearDown,
+        optionflags=doctest.ELLIPSIS,
     )
-    readme.layer = FunctionalLayer
+    import z3c.relationfield
+    readme.layer = ZCMLFileLayer(z3c.relationfield)
     return unittest.TestSuite([readme])

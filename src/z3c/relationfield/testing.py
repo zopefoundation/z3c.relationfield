@@ -1,14 +1,8 @@
-import os
 import z3c.relationfield
 from zc.relation.interfaces import ICatalog
 from zope.interface import implements
 from zope.component import provideUtility, getGlobalSiteManager
-from zope.app.testing.functional import ZCMLLayer
 from zope.intid.interfaces import IIntIds
-
-ftesting_zcml = os.path.join(
-    os.path.dirname(z3c.relationfield.__file__), 'ftesting.zcml')
-FunctionalLayer = ZCMLLayer(ftesting_zcml, __name__, 'FunctionalLayer')
 
 
 class MockIntIds(object):

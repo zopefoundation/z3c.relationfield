@@ -32,17 +32,15 @@ setup(
     install_requires=[
         'setuptools',
         'ZODB3',
-        'zope.app.intid',
-        'zope.app.container',
         'z3c.objpath',
         'zc.relation >= 1.0',
+        'zope.intid',
     ],
     extras_require={
         'test': [
-            'zope.app.zcmlfiles',
-            'zope.app.testing',
-            'zope.app.keyreference',
-            'zope.securitypolicy',
+            'zope.container',
+            'zope.copypastemove',
+            'zope.site',
         ],
         'xml': ['z3c.schema2xml >= 1.0',
                 'lxml'],

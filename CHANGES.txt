@@ -1,10 +1,11 @@
 CHANGES
 *******
 
-0.6.4 (unreleased)
+0.7.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Remove dependencies on zope.app.*
+  [davisagli]
 
 
 0.6.3 (2014-04-15)

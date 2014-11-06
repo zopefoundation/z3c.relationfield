@@ -46,30 +46,34 @@ as we want items to support both.
 
 Finally we need a test application::
 
-  >>> from zope.app.component.site import SiteManagerContainer
-  >>> from zope.app.container.btree import BTreeContainer
+  >>> from zope.site.site import SiteManagerContainer
+  >>> from zope.container.btree import BTreeContainer
   >>> class TestApp(SiteManagerContainer, BTreeContainer):
   ...   pass
 
 We set up the test application::
 
-  >>> root = getRootFolder()['root'] = TestApp()
+  >>> from ZODB.MappingStorage import DB
+  >>> db = DB()
+  >>> conn = db.open()
+  >>> root = conn.root()['root'] = TestApp()
+  >>> conn.add(root)
 
 We make sure that this is the current site, so we can look up local
 utilities in it and so on. Normally this is done automatically by
 Zope's traversal mechanism::
 
-  >>> from zope.app.component.site import LocalSiteManager
+  >>> from zope.site.site import LocalSiteManager
   >>> root.setSiteManager(LocalSiteManager(root))
-  >>> from zope.app.component.hooks import setSite
+  >>> from zope.component.hooks import setSite
   >>> setSite(root)
 
 For this site to work with ``z3c.relationship``, we need to set up two
 utilities. Firstly, an ``IIntIds`` that tracks unique ids for objects
 in the ZODB::
 
-  >>> from zope.app.intid import IntIds
-  >>> from zope.app.intid.interfaces import IIntIds
+  >>> from zope.intid import IntIds
+  >>> from zope.intid.interfaces import IIntIds
   >>> root['intids'] = intids = IntIds()
   >>> sm = root.getSiteManager()
   >>> sm.registerUtility(intids, provided=IIntIds)
@@ -92,7 +96,7 @@ All items, including the one we just created, should have unique int
 ids as this is required to link to them::
 
   >>> from zope import component
-  >>> from zope.app.intid.interfaces import IIntIds
+  >>> from zope.intid.interfaces import IIntIds
   >>> intids = component.getUtility(IIntIds)
   >>> a_id = intids.getId(root['a'])
   >>> a_id >= 0
