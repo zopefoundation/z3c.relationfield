@@ -1,8 +1,8 @@
 CHANGES
 *******
 
-0.7.0 (unreleased)
-==================
+0.7 (2015-03-13)
+================
 
 - Remove dependencies on zope.app.*
   [davisagli]
