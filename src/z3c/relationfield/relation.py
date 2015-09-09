@@ -74,7 +74,8 @@ class RelationValue(Persistent):
         return not self.__eq__(other)
 
     def __cmp__(self, other):
-        if other is None:
+        # if other is None:
+        if not hasattr(other, '_sort_key'):
             return cmp(self._sort_key(), None)
         return cmp(self._sort_key(), other._sort_key())
 
