@@ -19,7 +19,9 @@ Setup
 
 ``z3c.relationfield.Relation`` is a schema field that can be used to
 express relations. Let's define a schema IItem that uses a relation
-field::
+field:
+
+.. code-block:: python
 
   >>> from z3c.relationfield import Relation
   >>> from zope.interface import Interface
@@ -28,7 +30,9 @@ field::
 
 We also define a class ``Item`` that implements both ``IItem``
 and the special ``z3c.relationfield.interfaces.IHasRelations``
-interface::
+interface:
+
+.. code-block:: python
 
   >>> from z3c.relationfield.interfaces import IHasRelations
   >>> from persistent import Persistent
@@ -45,14 +49,18 @@ from it, for instance). It is in fact a combination of
 ``IHasIncomingRelations`` and ``IHasOutgoingRelations``, which is fine
 as we want items to support both.
 
-Finally we need a test application::
+Finally we need a test application:
+
+.. code-block:: python
 
   >>> from zope.site.site import SiteManagerContainer
   >>> from zope.container.btree import BTreeContainer
   >>> class TestApp(SiteManagerContainer, BTreeContainer):
   ...   pass
 
-We set up the test application::
+We set up the test application:
+
+.. code-block:: python
 
   >>> from ZODB.MappingStorage import DB
   >>> db = DB()
@@ -62,7 +70,9 @@ We set up the test application::
 
 We make sure that this is the current site, so we can look up local
 utilities in it and so on. Normally this is done automatically by
-Zope's traversal mechanism::
+Zope's traversal mechanism:
+
+.. code-block:: python
 
   >>> from zope.site.site import LocalSiteManager
   >>> root.setSiteManager(LocalSiteManager(root))
@@ -71,7 +81,9 @@ Zope's traversal mechanism::
 
 For this site to work with ``z3c.relationship``, we need to set up two
 utilities. Firstly, an ``IIntIds`` that tracks unique ids for objects
-in the ZODB::
+in the ZODB:
+
+.. code-block:: python
 
   >>> from zope.intid import IntIds
   >>> from zope.intid.interfaces import IIntIds
@@ -79,7 +91,9 @@ in the ZODB::
   >>> sm = root.getSiteManager()
   >>> sm.registerUtility(intids, provided=IIntIds)
 
-And secondly a relation catalog that actually indexes the relations::
+And secondly a relation catalog that actually indexes the relations:
+
+.. code-block:: python
 
   >>> from z3c.relationfield import RelationCatalog
   >>> from zc.relation.interfaces import ICatalog
@@ -89,12 +103,16 @@ And secondly a relation catalog that actually indexes the relations::
 Using the relation field
 ========================
 
-We'll add an item ``a`` to our application::
+We'll add an item ``a`` to our application:
+
+.. code-block:: python
 
   >>> root['a'] = Item()
 
 All items, including the one we just created, should have unique int
-ids as this is required to link to them::
+ids as this is required to link to them:
+
+.. code-block:: python
 
   >>> from zope import component
   >>> from zope.intid.interfaces import IIntIds
@@ -103,30 +121,40 @@ ids as this is required to link to them::
   >>> a_id >= 0
   True
 
-The relation is currently ``None``::
+The relation is currently ``None``:
+
+.. code-block:: python
 
   >>> root['a'].rel is None
   True
 
 Now we can create an item ``b`` that links to item ``a`` (through its
-int id)::
+int id):
+
+.. code-block:: python
 
   >>> from z3c.relationfield import RelationValue
   >>> b = Item()
   >>> b.rel = RelationValue(a_id)
 
 We now store the ``b`` object in a container, which will also set up
-its relation (as an ``IObjectAddedEvent`` will be fired)::
+its relation (as an ``IObjectAddedEvent`` will be fired):
+
+.. code-block:: python
 
   >>> root['b'] = b
 
 Let's examine the relation. First we'll check which attribute of the
-pointing object ('b') this relation is pointing from::
+pointing object ('b') this relation is pointing from:
+
+.. code-block:: python
 
   >>> root['b'].rel.from_attribute
   'rel'
 
-We can ask for the object it is pointing at::
+We can ask for the object it is pointing at:
+
+.. code-block:: python
 
   >>> to_object = root['b'].rel.to_object
   >>> to_object.__name__
@@ -134,21 +162,27 @@ We can ask for the object it is pointing at::
 
 We can also get the object that is doing the pointing; since we
 supplied the ``IHasRelations`` interface, the event system took care
-of setting this::
+of setting this:
+
+.. code-block:: python
 
   >>> from_object = root['b'].rel.from_object
   >>> from_object.__name__
   u'b'
 
 This object is also known as the ``__parent__``; again the event
-sytem took care of setting this::
+sytem took care of setting this:
+
+.. code-block:: python
 
   >>> parent_object = root['b'].rel.__parent__
   >>> parent_object is from_object
   True
 
 The relation also knows about the interfaces of both the pointing object
-and the object that is being pointed at::
+and the object that is being pointed at:
+
+.. code-block:: python
 
   >>> from pprint import pprint
   >>> pprint(sorted(root['b'].rel.from_interfaces))
@@ -163,7 +197,9 @@ and the object that is being pointed at::
    <InterfaceClass __builtin__.IItem>,
    <InterfaceClass persistent.interfaces.IPersistent>]
 
-We can also get the interfaces in flattened form::
+We can also get the interfaces in flattened form:
+
+.. code-block:: python
 
   >>> pprint(sorted(root['b'].rel.from_interfaces_flattened))
   [<InterfaceClass zope.location.interfaces.IContained>,
@@ -198,7 +234,9 @@ Since in this example we only place objects into a single flat root
 container, the paths in this demonstration can be extremely simple:
 just the name of the object we point to. In more sophisticated
 applications a path would typically be a slash separated path, like
-``/foo/bar``::
+``/foo/bar``:
+
+.. code-block:: python
 
   >>> from zope.interface import Interface
   >>> from zope.interface import implementer
@@ -223,12 +261,16 @@ applications a path would typically be a slash separated path, like
   >>> gsm.registerUtility(op)
 
 
-After this, we can get the path of the object the relation points to::
+After this, we can get the path of the object the relation points to:
+
+.. code-block:: python
 
   >>> root['b'].rel.to_path
   u'a'
 
-We can also get the path of the object that is doing the pointing::
+We can also get the path of the object that is doing the pointing:
+
+.. code-block:: python
 
   >>> root['b'].rel.from_path
   u'b'
@@ -236,7 +278,9 @@ We can also get the path of the object that is doing the pointing::
 Comparing and sorting relations
 ===============================
 
-Let's create a bunch of ``RelationValue`` objects and compare them::
+Let's create a bunch of ``RelationValue`` objects and compare them:
+
+.. code-block:: python
 
   >>> rel_to_a = RelationValue(a_id)
   >>> b_id = intids.getId(root['b'])
@@ -244,17 +288,23 @@ Let's create a bunch of ``RelationValue`` objects and compare them::
   >>> rel_to_a == rel_to_b
   False
 
-Relations of course are equal to themselves::
+Relations of course are equal to themselves:
+
+.. code-block:: python
 
   >>> rel_to_a == rel_to_a
   True
 
-A relation that is stored is equal to a relation that isn't stored yet::
+A relation that is stored is equal to a relation that isn't stored yet:
+
+.. code-block:: python
 
   >>> root['b'].rel == rel_to_a
   True
 
-We can also sort relations::
+We can also sort relations:
+
+.. code-block:: python
 
   >>> [(rel.from_path, rel.to_path) for rel in
   ...  sorted([root['b'].rel, rel_to_a, rel_to_b])]
@@ -267,18 +317,24 @@ Relation queries
 
 Now that we have set up and indexed a relationship between ``a`` and
 ``b``, we can issue queries using the relation catalog. Let's first
-get the catalog::
+get the catalog:
+
+.. code-block:: python
 
   >>> from zc.relation.interfaces import ICatalog
   >>> catalog = component.getUtility(ICatalog)
 
-Let's ask the catalog about the relation from ``b`` to ``a``::
+Let's ask the catalog about the relation from ``b`` to ``a``:
+
+.. code-block:: python
 
   >>> l = sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   >>> l
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-We look at this relation object again. We indeed go the right one::
+We look at this relation object again. We indeed go the right one:
+
+.. code-block:: python
 
   >>> rel = l[0]
   >>> rel.from_object.__name__
@@ -291,7 +347,9 @@ We look at this relation object again. We indeed go the right one::
   u'a'
 
 Asking for relations to ``b`` will result in an empty list, as no such
-relations have been set up::
+relations have been set up:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['b'])}))
   []
@@ -301,7 +359,9 @@ attribute used for the relation field and the interfaces provided by
 the related objects. Here we look for all relations between ``b`` and
 ``a`` that are stored in object attribute ``rel`` and are pointing
 from an object with interface ``IItem`` to another object with the
-interface ``IItem``::
+interface ``IItem``:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({
   ...   'to_id': intids.getId(root['a']),
@@ -310,7 +370,9 @@ interface ``IItem``::
   ...   'to_interfaces_flattened': IItem}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-There are no relations stored for another attribute::
+There are no relations stored for another attribute:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({
   ...   'to_id': intids.getId(root['a']),
@@ -318,7 +380,9 @@ There are no relations stored for another attribute::
   []
 
 There are also no relations stored for a new interface we'll introduce
-here::
+here:
+
+.. code-block:: python
 
   >>> class IFoo(IItem):
   ...   pass
@@ -332,38 +396,52 @@ here::
 Changing the relation
 =====================
 
-Let's create a new object ``c``::
+Let's create a new object ``c``:
+
+.. code-block:: python
 
   >>> root['c'] = Item()
   >>> c_id = intids.getId(root['c'])
 
-Nothing points to ``c`` yet::
+Nothing points to ``c`` yet:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
   []
 
-We currently have a relation from ``b`` to ``a``::
+We currently have a relation from ``b`` to ``a``:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-We can change the relation to point at a new object ``c``::
+We can change the relation to point at a new object ``c``:
+
+.. code-block:: python
 
   >>> root['b'].rel = RelationValue(c_id)
 
 We need to send an ``IObjectModifiedEvent`` to let the catalog know we
-have changed the relations::
+have changed the relations:
+
+.. code-block:: python
 
   >>> from zope.event import notify
   >>> from zope.lifecycleevent import ObjectModifiedEvent
   >>> notify(ObjectModifiedEvent(root['b']))
 
-We should find now a single relation from ``b`` to ``c``::
+We should find now a single relation from ``b`` to ``c``:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-The relation to ``a`` should now be gone::
+The relation to ``a`` should now be gone:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   []
@@ -371,28 +449,38 @@ The relation to ``a`` should now be gone::
 Removing the relation
 =====================
 
-We have a relation from ``b`` to ``c`` right now::
+We have a relation from ``b`` to ``c`` right now:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
 We can clean up an existing relation from ``b`` to ``c`` by setting it
-to ``None``::
+to ``None``:
+
+.. code-block:: python
 
   >>> root['b'].rel = None
 
 We need to send an ``IObjectModifiedEvent`` to let the catalog know we
-have changed the relations::
+have changed the relations:
+
+.. code-block:: python
 
   >>> notify(ObjectModifiedEvent(root['b']))
 
 Setting the relation on ``b`` to ``None`` should remove that relation
-from the relation catalog, so we shouldn't be able to find it anymore::
+from the relation catalog, so we shouldn't be able to find it anymore:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['c'])}))
   []
 
-Let's reestablish the removed relation::
+Let's reestablish the removed relation:
+
+.. code-block:: python
 
   >>> root['b'].rel = RelationValue(c_id)
   >>> notify(ObjectModifiedEvent(root['b']))
@@ -400,10 +488,13 @@ Let's reestablish the removed relation::
   >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
+
 Copying an object with relations
 ================================
 
-Let's copy an object with relations::
+Let's copy an object with relations:
+
+.. code-block:: python
 
   >>> from zope.copypastemove.interfaces import IObjectCopier
   >>> IObjectCopier(root['b']).copyTo(root)
@@ -412,7 +503,9 @@ Let's copy an object with relations::
   True
 
 Two relations to ``c`` can now be found, one from the original, and
-the other from the copy::
+the other from the copy:
+
+.. code-block:: python
 
   >>> l = sorted(catalog.findRelations({'to_id': c_id}))
   >>> len(l)
@@ -422,6 +515,7 @@ the other from the copy::
   >>> l[1].from_path
   u'b-2'
 
+
 Relations are sortable
 ======================
 
@@ -429,7 +523,9 @@ Relations are sorted by default on a combination of the relation name,
 the path of the object the relation is one and the path of the object
 the relation is pointing to.
 
-Let's query all relations availble right now and sort them::
+Let's query all relations availble right now and sort them:
+
+.. code-block:: python
 
   >>> l = sorted(catalog.findRelations())
   >>> len(l)
@@ -443,11 +539,14 @@ Let's query all relations availble right now and sort them::
   >>> l[1].from_path
   u'b-2'
 
+
 Removing an object with relations
 =================================
 
-We will remove ``b-2`` again. Its relation should automatically be removed
-from the catalog::
+We will remove ``b-2`` again. Its relation should automatically be remove
+from the catalog:
+
+.. code-block:: python
 
   >>> del root['b-2']
   >>> l = sorted(catalog.findRelations({'to_id': c_id}))
@@ -456,64 +555,88 @@ from the catalog::
   >>> l[0].from_path
   u'b'
 
+
 Breaking a relation
 ===================
 
-We have a relation from ``b`` to ``c`` right now::
+We have a relation from ``b`` to ``c`` right now:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-We have no broken relations::
+We have no broken relations:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': None}))
   []
 
-The relation isn't broken::
+The relation isn't broken:
+
+.. code-block:: python
 
   >>> b.rel.isBroken()
   False
 
-We are now going to break this relation by removing ``c``::
+We are now going to break this relation by removing ``c``:
+
+.. code-block:: python
 
   >>> del root['c']
 
-The relation is broken now::
+The relation is broken now:
+
+.. code-block:: python
 
   >>> b.rel.isBroken()
   True
 
-The original relation still has a ``to_path``::
+The original relation still has a ``to_path``:
+
+.. code-block:: python
 
   >>> b.rel.to_path
   u'c'
 
-It's broken however as there is no ``to_object``::
+It's broken however as there is no ``to_object``:
+
+.. code-block:: python
 
   >>> b.rel.to_object is None
   True
 
-The ``to_id`` is also gone::
+The ``to_id`` is also gone:
+
+.. code-block:: python
 
   >>> b.rel.to_id is None
   True
 
 We cannot find the broken relation in the catalog this way as it's not
-pointing to ``c_id`` anymore::
+pointing to ``c_id`` anymore:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
   []
 
 We can however find it by searching for relations that have a
-``to_id`` of ``None``::
+``to_id`` of ``None``:
+
+.. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': None}))
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-A broken relation isn't equal to ``None`` (this was a bug)::
+A broken relation isn't equal to ``None`` (this was a bug):
+
+.. code-block:: python
 
   >>> b.rel == None
   False
+
 
 RelationChoice
 ==============
@@ -523,7 +646,9 @@ but can be used to render a special widget that allows a choice of
 selections.
 
 We will first demonstrate a ``RelationChoice`` field has the same effect
-as a ``Relation`` field itself::
+as a ``Relation`` field itself:
+
+.. code-block:: python
 
   >>> from z3c.relationfield import RelationChoice
   >>> class IChoiceItem(Interface):
@@ -534,18 +659,24 @@ as a ``Relation`` field itself::
   ...   def __init__(self):
   ...     self.rel = None
 
-Let's create an object to point the relation to::
+Let's create an object to point the relation to:
+
+.. code-block:: python
 
   >>> root['some_object'] = Item()
   >>> some_object_id = intids.getId(root['some_object'])
 
-And let's establish the relation::
+And let's establish the relation:
+
+:.. code-block:: python
 
   >>> choice_item = ChoiceItem()
   >>> choice_item.rel = RelationValue(some_object_id)
   >>> root['choice_item'] = choice_item
 
-We can query for this relation now::
+We can query for this relation now:
+
+.. code-block:: python
 
   >>> l = sorted(catalog.findRelations({'to_id': some_object_id}))
   >>> l
@@ -555,7 +686,9 @@ RelationList
 ============
 
 Let's now experiment with the ``RelationList`` field which can be used
-to maintain a list of relations::
+to maintain a list of relations:
+
+.. code-block:: python
 
   >>> from z3c.relationfield import RelationList
   >>> class IMultiItem(Interface):
@@ -563,7 +696,9 @@ to maintain a list of relations::
 
 We also define a class ``MultiItem`` that implements both
 ``IMultiItem`` and the special
-``z3c.relationfield.interfaces.IHasRelations`` interface::
+``z3c.relationfield.interfaces.IHasRelations`` interface:
+
+.. code-block:: python
 
   >>> @implementer(IMultiItem, IHasRelations)
   ... class MultiItem(Persistent):
@@ -571,14 +706,18 @@ We also define a class ``MultiItem`` that implements both
   ...   def __init__(self):
   ...     self.rel = None
 
-We set up a few object we can then create relations between::
+We set up a few object we can then create relations between:
+
+.. code-block:: python
 
   >>> root['multi1'] = MultiItem()
   >>> root['multi2'] = MultiItem()
   >>> root['multi3'] = MultiItem()
 
 Let's create a relation from ``multi1`` to both ``multi2`` and
-``multi3``::
+``multi3``:
+
+.. code-block:: python
 
   >>> multi1_id = intids.getId(root['multi1'])
   >>> multi2_id = intids.getId(root['multi2'])
@@ -587,12 +726,16 @@ Let's create a relation from ``multi1`` to both ``multi2`` and
   >>> root['multi1'].rel = [RelationValue(multi2_id),
   ...                       RelationValue(multi3_id)]
 
-We need to notify that we modified the object
+We need to notify that we modified the ObjectModifiedEvent
+
+.. code-block:: python
 
   >>> notify(ObjectModifiedEvent(root['multi1']))
 
 Now that this is set up, let's verify whether we can find the
-proper relations in in the catalog::
+proper relations in in the catalog:
+
+.. code-block:: python
 
   >>> len(list(catalog.findRelations({'to_id': multi2_id})))
   1
@@ -600,6 +743,7 @@ proper relations in in the catalog::
   1
   >>> len(list(catalog.findRelations({'from_id': multi1_id})))
   2
+
 
 Temporary relations
 ===================
@@ -611,13 +755,17 @@ imported. We provide a special ``TemporaryRelationValue`` for this
 case.  A ``TemporaryRelationValue`` just contains the path of what it
 is pointing to, but does not resolve it yet. Let's use
 ``TemporaryRelationValue`` in a new object, creating a relation to
-``a``::
+``a``:
+
+.. code-block:: python
 
   >>> from z3c.relationfield import TemporaryRelationValue
   >>> root['d'] = Item()
   >>> root['d'].rel = TemporaryRelationValue('a')
 
-A modification event does not actually get this relation cataloged::
+A modification event does not actually get this relation cataloged:
+
+.. code-block:: python
 
   >>> before = sorted(catalog.findRelations({'to_id': a_id}))
   >>> notify(ObjectModifiedEvent(root['d']))
@@ -625,39 +773,53 @@ A modification event does not actually get this relation cataloged::
   >>> len(before) == len(after)
   True
 
-We will now convert all temporary relations on ``d`` to real ones::
+We will now convert all temporary relations on ``d`` to real ones:
+
+.. code-block:: python
 
   >>> from z3c.relationfield import realize_relations
   >>> realize_relations(root['d'])
   >>> notify(ObjectModifiedEvent(root['d']))
 
-We can see the real relation object now::
+We can see the real relation object now:
+
+.. code-block:: python
 
   >>> root['d'].rel
   <z3c.relationfield.relation.RelationValue object at ...>
 
-The relation will also now show up in the catalog::
+The relation will also now show up in the catalog:
+
+.. code-block:: python
 
   >>> after2 = sorted(catalog.findRelations({'to_id': a_id}))
   >>> len(after2) > len(before)
   True
 
-Temporary relation values also work with ``RelationList`` objects::
+Temporary relation values also work with ``RelationList`` objects:
+
+.. code-block:: python
 
   >>> root['multi_temp'] = MultiItem()
   >>> root['multi_temp'].rel = [TemporaryRelationValue('a')]
 
-Let's convert this to a real relation::
+Let's convert this to a real relation:
+
+.. code-block:: python
 
   >>> realize_relations(root['multi_temp'])
   >>> notify(ObjectModifiedEvent(root['multi_temp']))
 
-Again we can see the real relation object when we look at it::
+Again we can see the real relation object when we look at it:
+
+.. code-block:: python
 
   >>> root['multi_temp'].rel
   [<z3c.relationfield.relation.RelationValue object at ...>]
 
-And we will now see this new relation appear in the catalog::
+And we will now see this new relation appear in the catalog:
+
+.. code-block:: python
 
   >>> after3 = sorted(catalog.findRelations({'to_id': a_id}))
   >>> len(after3) > len(after2)
@@ -667,21 +829,29 @@ Broken temporary relations
 ==========================
 
 Let's create another temporary relation, this time a broken one that
-cannot be resolved::
+cannot be resolved:
+
+.. code-block:: python
 
   >>> root['e'] = Item()
   >>> root['e'].rel = TemporaryRelationValue('nonexistent')
 
-Let's try realizing this relation::
+Let's try realizing this relation:
+
+.. code-block:: python
 
   >>> realize_relations(root['e'])
 
-We end up with a broken relation::
+We end up with a broken relation:
+
+.. code-block:: python
 
   >>> root['e'].rel.isBroken()
   True
 
-It's pointing to the nonexistent path::
+It's pointing to the nonexistent path:
+
+.. code-block:: python
 
   >>> root['e'].rel.to_path
   'nonexistent'
