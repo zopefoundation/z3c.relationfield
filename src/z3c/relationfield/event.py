@@ -2,16 +2,23 @@
 from z3c.relationfield.interfaces import IHasIncomingRelations
 from z3c.relationfield.interfaces import IHasOutgoingRelations
 from z3c.relationfield.interfaces import IRelation
+from z3c.relationfield.interfaces import IRelationBrokenEvent
 from z3c.relationfield.interfaces import IRelationList
 from z3c.relationfield.interfaces import IRelationValue
 from z3c.relationfield.interfaces import ITemporaryRelationValue
 from zc.relation.interfaces import ICatalog
 from zope import component
-from zope.intid.interfaces import IIntIds
 from zope.event import notify
+from zope.interface import implementer
 from zope.interface import providedBy
+from zope.intid.interfaces import IIntIds
 from zope.lifecycleevent import ObjectModifiedEvent
 from zope.schema import getFields
+
+
+@implementer(IRelationBrokenEvent)
+class RelationBrokenEvent(ObjectModifiedEvent):
+    pass
 
 
 def addRelations(obj, event):
@@ -102,7 +109,7 @@ def breakRelations(event):
     for rel in rels:
         rel.broken(rel.to_path)
         # we also need to update the relations for these objects
-        notify(ObjectModifiedEvent(rel.from_object))
+        notify(RelationBrokenEvent(rel.from_object))
 
 
 def realize_relations(obj):

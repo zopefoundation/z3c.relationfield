@@ -4,7 +4,8 @@ CHANGES
 0.7.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Provide IRelationBrokenEvent to be able to distinguish the event when using IObjectModifiedEvent
+  [vangheem]
 
 
 0.7 (2015-03-13)

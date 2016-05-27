@@ -1,3 +1,4 @@
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
 from zope.interface import Interface, Attribute
 from zope.schema.interfaces import IField, IList
 
@@ -16,7 +17,7 @@ class IHasIncomingRelations(Interface):
     relations. This will make sure that broken relations to that
     object are tracked properly.
     """
-    
+
 class IHasRelations(IHasIncomingRelations, IHasOutgoingRelations):
     """Marker interface indicating that the object has relations of any kind.
 
@@ -45,7 +46,7 @@ class IRelationValue(Interface):
     from_object = Attribute("The object this relation is pointing from.")
 
     from_id = Attribute("Id of the object this relation is pointing from.")
-    
+
     from_path = Attribute("The path of the from object.")
 
     from_interfaces = Attribute("The interfaces of the from object.")
@@ -53,9 +54,9 @@ class IRelationValue(Interface):
     from_interfaces_flattened = Attribute(
         "Interfaces of the from object, flattened. "
         "This includes all base interfaces.")
-    
+
     from_attribute = Attribute("The name of the attribute of the from object.")
-    
+
     to_object = Attribute("The object this relation is pointing to. "
                           "This value is None if the relation is broken.")
 
@@ -101,3 +102,7 @@ class ITemporaryRelationValue(Interface):
 
         Returns real relation object
         """
+
+
+class IRelationBrokenEvent(IObjectModifiedEvent):
+    pass
