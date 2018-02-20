@@ -32,9 +32,10 @@ interface::
 
   >>> from z3c.relationfield.interfaces import IHasRelations
   >>> from persistent import Persistent
-  >>> from zope.interface import implements
-  >>> class Item(Persistent):
-  ...   implements(IItem, IHasRelations)
+  >>> from zope.interface import implementer
+  >>> @implementer(IItem, IHasRelations)
+  ... class Item(Persistent):
+  ...
   ...   def __init__(self):
   ...     self.rel = None
 
@@ -200,13 +201,12 @@ applications a path would typically be a slash separated path, like
 ``/foo/bar``::
 
   >>> from zope.interface import Interface
-  >>> from zope.interface import implements
+  >>> from zope.interface import implementer
   >>> from z3c.objpath.interfaces import IObjectPath
 
 
-  >>> class ObjectPath(object):
-  ...
-  ...     implements(IObjectPath)
+  >>> @implementer(IObjectPath)
+  ... class ObjectPath(object):
   ...
   ...     def path(self, obj):
   ...         return obj.__name__
@@ -528,8 +528,9 @@ as a ``Relation`` field itself::
   >>> from z3c.relationfield import RelationChoice
   >>> class IChoiceItem(Interface):
   ...   rel = RelationChoice(title=u"Relation", values=[])
-  >>> class ChoiceItem(Persistent):
-  ...   implements(IChoiceItem, IHasRelations)
+  >>> @implementer(IChoiceItem, IHasRelations)
+  ... class ChoiceItem(Persistent):
+  ...
   ...   def __init__(self):
   ...     self.rel = None
 
@@ -564,8 +565,9 @@ We also define a class ``MultiItem`` that implements both
 ``IMultiItem`` and the special
 ``z3c.relationfield.interfaces.IHasRelations`` interface::
 
-  >>> class MultiItem(Persistent):
-  ...   implements(IMultiItem, IHasRelations)
+  >>> @implementer(IMultiItem, IHasRelations)
+  ... class MultiItem(Persistent):
+  ...
   ...   def __init__(self):
   ...     self.rel = None
 

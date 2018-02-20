@@ -1,16 +1,19 @@
 from z3c.relationfield.interfaces import IRelation
 from z3c.relationfield.interfaces import IRelationChoice
 from z3c.relationfield.interfaces import IRelationList
-from zope.interface import implements
-from zope.schema import Field, List, Choice
+from zope.interface import implementer
+from zope.schema import Choice
+from zope.schema import Field
+from zope.schema import List
 
 
+@implementer(IRelation)
 class Relation(Field):
-    implements(IRelation)
+    pass
 
 
+@implementer(IRelationList)
 class RelationList(List):
-    implements(IRelationList)
 
     def __init__(self, value_type=None, unique=False, **kw):
         if value_type is None:
@@ -22,5 +25,6 @@ class RelationList(List):
         )
 
 
+@implementer(IRelationChoice)
 class RelationChoice(Choice):
-    implements(IRelationChoice)
+    pass

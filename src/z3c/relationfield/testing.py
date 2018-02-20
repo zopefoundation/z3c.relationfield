@@ -1,28 +1,34 @@
-import z3c.relationfield
 from zc.relation.interfaces import ICatalog
-from zope.interface import implements
-from zope.component import provideUtility, getGlobalSiteManager
+from zope.component import getGlobalSiteManager
+from zope.component import provideUtility
+from zope.interface import implementer
 from zope.intid.interfaces import IIntIds
 
+import z3c.relationfield
 
+
+@implementer(IIntIds)
 class MockIntIds(object):
     """Dumb utility for unit tests, returns sequential integers. Not a
     complete implementation."""
-    implements(IIntIds)
 
     def getId(self, ob):
         """Appropriately raises KeyErrors when the object is not registered,
         e.g. always"""
         raise KeyError(ob)
+
+
 mock_intids = MockIntIds()
 
 
+@implementer(ICatalog)
 class MockCatalog(object):
     """Does nothing except exist"""
-    implements(ICatalog)
 
     def findRelations(self, query):
         return []
+
+
 mock_catalog = MockCatalog()
 
 
@@ -44,5 +50,6 @@ def unregister_fake_catalog():
     sm.unregisterUtility(mock_catalog)
 
 
+@implementer(z3c.relationfield.interfaces.IHasRelations)
 class MockContent(object):
-    implements(z3c.relationfield.interfaces.IHasRelations)
+    pass
