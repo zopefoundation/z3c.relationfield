@@ -6,9 +6,9 @@ def read(*rnames):
     return open(os.path.join(*rnames)).read()
 
 long_description = (
-    read('src', 'z3c', 'relationfield', 'README.txt')
+    read('src', 'z3c', 'relationfield', 'README.rst')
     + '\n' +
-    read('CHANGES.txt')
+    read('CHANGES.rst')
     + '\n' +
     'Download\n'
     '********\n'
