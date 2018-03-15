@@ -7,7 +7,8 @@ CHANGES
 - Python 3 compatibility: use the implementer decorator
   [ale-rt]
 
-- Renamed ``Readme.txt`` and ``CHANGES.txt`` to ``README.rst`` and ``CHANGES.rst``.
+- Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
+  ``CHANGES.rst``.
   [thet]
 
 
