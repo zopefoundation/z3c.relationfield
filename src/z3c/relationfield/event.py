@@ -71,7 +71,8 @@ def updateRelations(obj, event):
     # remove previous relations coming from id (now have been overwritten)
     # have to activate query here with list() before unindexing them so we don't
     # get errors involving buckets changing size
-    rels = list(catalog.findRelations({'from_id': obj_id}))
+    rels = [rel for rel in catalog.findRelations({'from_id': obj_id})
+            if rel.isBroken()]
     for rel in rels:
         catalog.unindex(rel)
 

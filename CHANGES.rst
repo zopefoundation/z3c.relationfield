@@ -11,6 +11,10 @@ CHANGES
   ``CHANGES.rst``.
   [thet]
 
+- Only remove broken references on update
+  see https://github.com/plone/Products.CMFPlone/issues/2384
+  [tomgross]
+
 
 0.7 (2015-03-13)
 ================
