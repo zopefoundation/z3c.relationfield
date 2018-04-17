@@ -73,7 +73,8 @@ def updateRelations(obj, event):
     # get errors involving buckets changing size
     rels = list(catalog.findRelations({'from_id': obj_id}))
     for rel in rels:
-        catalog.unindex(rel)
+        if hasattr(obj, rel.from_attribute):
+            catalog.unindex(rel)
 
     # add new relations
     addRelations(obj, event)
