@@ -31,7 +31,6 @@ setup(
     zip_safe=False,
     install_requires=[
         'setuptools',
-        'ZODB3',
         'z3c.objpath',
         'zc.relation >= 1.0',
         'zope.intid',
