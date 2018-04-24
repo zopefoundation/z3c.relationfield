@@ -11,6 +11,12 @@ CHANGES
   ``CHANGES.rst``.
   [thet]
 
+- Update buildout / travis config
+  [tomgross]
+
+- Fix issue where relations are cleared on modify if they are not stored as
+  an class attribute. Usecase see https://github.com/plone/Products.CMFPlone/issues/2384
+  [tomgross]
 
 0.7 (2015-03-13)
 ================

@@ -446,6 +446,24 @@ The relation to ``a`` should now be gone:
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   []
 
+
+If we store the relation in a non schema field it should persist
+the ObjectModifiedEvent.
+
+.. code-block:: python
+
+  >>> from z3c.relationfield.event import _setRelation
+  >>> _setRelation(root['b'], 'my-fancy-relation', rel_to_a)
+  >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
+  [<z3c.relationfield.relation.RelationValue object at ...>]
+
+  >>> notify(ObjectModifiedEvent(root['b']))
+  >>> rel = sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
+  >>> rel
+  [<z3c.relationfield.relation.RelationValue object at ...>]
+
+  >>> catalog.unindex(rel[0])
+
 Removing the relation
 =====================
 
