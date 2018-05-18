@@ -7,6 +7,8 @@ CHANGES
 - Python 3 compatibility: use the implementer decorator
   [ale-rt]
 
+- Python 3 compatibility: Make ``RelationValue`` hashable. [sallner]
+
 - Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
   ``CHANGES.rst``.
   [thet]

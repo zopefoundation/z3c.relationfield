@@ -21,6 +21,10 @@ class RelationValue(Persistent):
         self.__parent__ = None
         self.from_attribute = None
 
+    def __hash__(self):
+        """There should only be one RelationVaule per sort_key."""
+        return hash(self._sort_key)
+
     @property
     def from_id(self):
         intids = component.getUtility(IIntIds)
