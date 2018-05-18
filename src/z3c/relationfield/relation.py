@@ -23,7 +23,7 @@ class RelationValue(Persistent):
 
     def __hash__(self):
         """There should only be one RelationVaule per sort_key."""
-        return hash(self._sort_key)
+        return id(self)
 
     @property
     def from_id(self):
