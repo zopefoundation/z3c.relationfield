@@ -306,10 +306,11 @@ We can also sort relations:
 
 .. code-block:: python
 
-  >>> [(rel.from_path, rel.to_path) for rel in
+  >>> expected = [('', u'a'), ('', u'b'), (u'b', u'a')]
+  >>> observed = [(rel.from_path, rel.to_path) for rel in
   ...  sorted([root['b'].rel, rel_to_a, rel_to_b])]
-  [('', u'a'), ('', u'b'), (u'b', u'a')]
-
+  >>> expected == observed
+  True
 
 
 Relation queries

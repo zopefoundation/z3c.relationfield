@@ -1,5 +1,7 @@
 from zope.component.testlayer import ZCMLFileLayer
 import doctest
+import re
+import six
 import sys
 import unittest
 
@@ -8,6 +10,27 @@ import unittest
 class NoCopyDict(dict):
     def copy(self):
         return self
+
+
+class Py23DocChecker(doctest.OutputChecker):
+
+    def check_output(self, want, got, optionflags):
+        if six.PY2:
+            want = re.sub("b'(.*?)'", "'\\1'", want)
+        else:
+            want = re.sub("u'(.*?)'", "'\\1'", want)
+            # translate doctest exceptions
+            for dotted in (
+                'urllib.error.HTTPError',
+            ):
+                if dotted in got:
+                    got = re.sub(
+                        dotted,
+                        dotted.rpartition('.')[-1],
+                        got,
+                    )
+
+        return doctest.OutputChecker.check_output(self, want, got, optionflags)
 
 
 class FakeModule:
@@ -42,6 +65,7 @@ def test_suite():
         setUp=setUp,
         tearDown=tearDown,
         optionflags=doctest.ELLIPSIS,
+        checker=Py23DocChecker(),
     )
     import z3c.relationfield
     readme.layer = ZCMLFileLayer(z3c.relationfield)
