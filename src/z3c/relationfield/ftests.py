@@ -19,16 +19,6 @@ class Py23DocChecker(doctest.OutputChecker):
             want = re.sub("b'(.*?)'", "'\\1'", want)
         else:
             want = re.sub("u'(.*?)'", "'\\1'", want)
-            # translate doctest exceptions
-            for dotted in (
-                'urllib.error.HTTPError',
-            ):
-                if dotted in got:
-                    got = re.sub(
-                        dotted,
-                        dotted.rpartition('.')[-1],
-                        got,
-                    )
 
         return doctest.OutputChecker.check_output(self, want, got, optionflags)
 
