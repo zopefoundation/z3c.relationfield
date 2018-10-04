@@ -4,7 +4,7 @@ CHANGES
 0.7.1 (unreleased)
 ==================
 
-- Python 3 compatibility: use the implementer decorator
+- Python 3 compatibility: use the implementer decorator and fix ordering
   [ale-rt]
 
 - Python 3 compatibility: Make ``RelationValue`` hashable. [sallner]

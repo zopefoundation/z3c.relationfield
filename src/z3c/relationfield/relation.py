@@ -1,3 +1,4 @@
+from functools import total_ordering
 from persistent import Persistent
 from z3c.objpath.interfaces import IObjectPath
 from z3c.relationfield.interfaces import IRelationValue
@@ -10,6 +11,7 @@ from zope.intid.interfaces import IIntIds
 
 
 @implementer(IRelationValue)
+@total_ordering
 class RelationValue(Persistent):
 
     _broken_to_path = None
@@ -77,10 +79,18 @@ class RelationValue(Persistent):
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def __cmp__(self, other):
-        if other is None:
-            return cmp(self._sort_key(), None)
-        return cmp(self._sort_key(), other._sort_key())
+    def __lt__(self, other):
+        ''' Relations are sorted by default on a combination of the relation name,
+        the path of the object the relation is one and the path of the object
+        the relation is pointing to.
+        '''
+        if (self.from_attribute or '') < (other.from_attribute or ''):
+            return True
+        if (self.from_path or '') < (other.from_path or ''):
+            return True
+        if (self.to_path or '') < (other.to_path or ''):
+            return True
+        return False
 
     def _sort_key(self):
         return (self.from_attribute, self.from_path, self.to_path)
