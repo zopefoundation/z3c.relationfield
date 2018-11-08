@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.7.1 (unreleased)
+0.7.1 (2018-11-08)
 ==================
 
 - Python 3 compatibility: use the implementer decorator and fix ordering
