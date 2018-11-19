@@ -7,6 +7,19 @@ CHANGES
 - Provide IRelationBrokenEvent to be able to distinguish the event when using IObjectModifiedEvent
   [vangheem]
 
+ - Python 3 compatibility: use the implementer decorator
+  [ale-rt]
+
+- Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
+  ``CHANGES.rst``.
+  [thet]
+
+- Update buildout / travis config
+  [tomgross]
+
+- Fix issue where relations are cleared on modify if they are not stored as
+  an class attribute. Usecase see https://github.com/plone/Products.CMFPlone/issues/2384
+  [tomgross]
 
 0.7 (2015-03-13)
 ================

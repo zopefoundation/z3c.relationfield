@@ -37,7 +37,7 @@ def tearDown(test):
 def test_suite():
     globs = {}
     readme = doctest.DocFileSuite(
-        'README.txt',
+        'README.rst',
         globs=globs,
         setUp=setUp,
         tearDown=tearDown,

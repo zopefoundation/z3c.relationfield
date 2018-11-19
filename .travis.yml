@@ -1,7 +1,7 @@
 language: python
 install:
-    - python bootstrap.py
-    - bin/buildout
+    - pip install zc.buildout
+    - buildout
 script:
     - bin/test -pvc
 notifications:
