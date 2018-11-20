@@ -4,10 +4,10 @@ CHANGES
 0.7.1 (unreleased)
 ==================
 
-- Provide IRelationBrokenEvent to be able to distinguish the event when using IObjectModifiedEvent
+- Provide IRelationBrokenEvent to be able to distinguish the event when subscribing to IObjectModifiedEvent
   [vangheem]
 
- - Python 3 compatibility: use the implementer decorator
+- Python 3 compatibility: use the implementer decorator
   [ale-rt]
 
 - Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
