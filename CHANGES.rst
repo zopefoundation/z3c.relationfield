@@ -1,11 +1,29 @@
 CHANGES
 *******
 
-0.7.1 (unreleased)
+0.7.2 (unreleased)
 ==================
 
-- Python 3 compatibility: use the implementer decorator
+Breaking changes:
+
+- *add item here*
+
+New features:
+
+- *add item here*
+
+Bug fixes:
+
+- *add item here*
+
+
+0.7.1 (2018-11-08)
+==================
+
+- Python 3 compatibility: use the implementer decorator and fix ordering
   [ale-rt]
+
+- Python 3 compatibility: Make ``RelationValue`` hashable. [sallner]
 
 - Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
   ``CHANGES.rst``.
