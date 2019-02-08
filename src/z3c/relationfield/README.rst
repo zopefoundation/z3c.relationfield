@@ -874,3 +874,12 @@ It's pointing to the nonexistent path:
 
   >>> root['e'].rel.to_path
   'nonexistent'
+
+Setting up a releation catalog
+==============================
+
+This package provides a RelationCatalog initialized with a set of indexes commonly useful for queries on RelationValue objects.
+The default indexes are `from_id`, `to_id`, `from_attribute`, `from_interfaces_flattened` and `to_interfaces_flattened`.
+
+However, sometimes it is needed to define custom indexes.
+The `zc.relationfield.index.RelationCatalog` class can be initialized with a list of dicts with keys `name` and `kwargs` to be passed to RelationCatalog to be passed to the catalogs `addValueIndex` method.

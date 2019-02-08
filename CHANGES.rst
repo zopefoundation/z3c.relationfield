@@ -10,7 +10,7 @@ Breaking changes:
 
 New features:
 
-- addresses #4, allows third party software to define which indexes are used.
+- Adresses `Still uses BTrees wrongly, screws up people changing Interfaces <https://github.com/zopefoundation/z3c.relationfield/issues/4>`_, allows third party software to define which indexes are used.
   [jensens]
 
 Bug fixes:

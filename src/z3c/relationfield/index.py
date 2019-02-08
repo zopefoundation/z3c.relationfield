@@ -52,9 +52,9 @@ def load(token, catalog, cache):
 class RelationCatalog(Catalog):
 
     def __init__(self, indexes=DEFAULT_INDEXES):
-        """initialize the catalog with indexes.with
+        """Initialize the catalog with indexes.
 
-        Uses defaults if not special configuration was passed.was
+        Uses defaults if not special configuration was passed.
         """
         Catalog.__init__(self, dump, load)
         for index in indexes:
