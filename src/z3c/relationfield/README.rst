@@ -881,5 +881,7 @@ Setting up a releation catalog
 This package provides a RelationCatalog initialized with a set of indexes commonly useful for queries on RelationValue objects.
 The default indexes are `from_id`, `to_id`, `from_attribute`, `from_interfaces_flattened` and `to_interfaces_flattened`.
 
-However, sometimes it is needed to define custom indexes.
-The `zc.relationfield.index.RelationCatalog` class can be initialized with a list of dicts with keys `name` and `kwargs` to be passed to RelationCatalog to be passed to the catalogs `addValueIndex` method.
+Sometimes it is needed to define custom indexes or use less than the default ones.
+The `zc.relationfield.index.RelationCatalog` class can be initialized with a list of dicts with keys `element` and `kwargs` to be passed to RelationCatalog `addValueIndex` method.
+As `element` in general the attribute on the `IRelationValue` like `IRelationValue['from_id']` is expected.
+However, if theres a subclass of `IRelationValue` is used with additional fields, those fields can be added here as indexes.

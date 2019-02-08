@@ -7,26 +7,26 @@ import BTrees
 
 DEFAULT_INDEXES = [
     {
-        'name': 'from_id',
+        'element': IRelationValue['from_id'],
     },
     {
-        'name': 'to_id',
+        'element': IRelationValue['to_id'],
     },
     {
-        'name': 'from_attribute',
+        'element': IRelationValue['from_attribute'],
         'kwargs': {
             'btree': BTrees.family32.OI,
         },
     },
     {
-        'name': 'from_interfaces_flattened',
+        'element': IRelationValue['from_interfaces_flattened'],
         'kwargs': {
             'btree': BTrees.family32.OI,
             'multiple': True,
         },
     },
     {
-        'name': 'to_interfaces_flattened',
+        'element': IRelationValue['to_interfaces_flattened'],
         'kwargs': {
             'btree': BTrees.family32.OI,
             'multiple': True,
@@ -58,7 +58,4 @@ class RelationCatalog(Catalog):
         """
         Catalog.__init__(self, dump, load)
         for index in indexes:
-            self.addValueIndex(
-                IRelationValue[index['name']],
-                **index.get('kwargs', {})
-            )
+            self.addValueIndex(index['element'], **index.get('kwargs', {}))
