@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.7.2 (unreleased)
+0.8.0 (unreleased)
 ==================
 
 Breaking changes:
@@ -10,7 +10,8 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- addresses #4, allows third party software to define which indexes are used.
+  [jensens]
 
 Bug fixes:
 

@@ -5,6 +5,35 @@ from zope.intid.interfaces import IIntIds
 
 import BTrees
 
+DEFAULT_INDEXES = [
+    {
+        'name': 'from_id',
+    },
+    {
+        'name': 'to_id',
+    },
+    {
+        'name': 'from_attribute',
+        'kwargs': {
+            'btree': BTrees.family32.OI,
+        },
+    },
+    {
+        'name': 'from_interfaces_flattened',
+        'kwargs': {
+            'btree': BTrees.family32.OI,
+            'multiple': True,
+        },
+    },
+    {
+        'name': 'to_interfaces_flattened',
+        'kwargs': {
+            'btree': BTrees.family32.OI,
+            'multiple': True,
+        },
+    },
+]
+
 
 def dump(obj, catalog, cache):
     intids = cache.get('intids')
@@ -22,15 +51,14 @@ def load(token, catalog, cache):
 
 class RelationCatalog(Catalog):
 
-    def __init__(self):
+    def __init__(self, indexes=DEFAULT_INDEXES):
+        """initialize the catalog with indexes.with
+
+        Uses defaults if not special configuration was passed.was
+        """
         Catalog.__init__(self, dump, load)
-        self.addValueIndex(IRelationValue['from_id'])
-        self.addValueIndex(IRelationValue['to_id'])
-        self.addValueIndex(IRelationValue['from_attribute'],
-                           btree=BTrees.family32.OI)
-        self.addValueIndex(IRelationValue['from_interfaces_flattened'],
-                           multiple=True,
-                           btree=BTrees.family32.OI)
-        self.addValueIndex(IRelationValue['to_interfaces_flattened'],
-                           multiple=True,
-                           btree=BTrees.family32.OI)
+        for index in indexes:
+            self.addValueIndex(
+                IRelationValue[index['name']],
+                **index.get('kwargs', {})
+            )
