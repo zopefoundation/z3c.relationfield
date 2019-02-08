@@ -54,7 +54,7 @@ class RelationCatalog(Catalog):
     def __init__(self, indexes=DEFAULT_INDEXES):
         """Initialize the catalog with indexes.
 
-        Uses defaults if not special configuration was passed.
+        Uses defaults if no special configuration was passed.
         """
         Catalog.__init__(self, dump, load)
         for index in indexes:
