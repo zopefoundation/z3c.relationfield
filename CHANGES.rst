@@ -15,7 +15,8 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Fix DeprecationWarnings in ``tests.py``.
+  [jensens]
 
 
 0.7.1 (2018-11-08)

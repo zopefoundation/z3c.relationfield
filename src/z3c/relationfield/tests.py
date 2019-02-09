@@ -8,8 +8,8 @@ from z3c.relationfield.testing import (
 )
 from z3c.relationfield import event
 from z3c.relationfield import RelationList, Relation
-from zope.component.interfaces import ObjectEvent
-from zope.component.interfaces import ComponentLookupError
+from zope.interface.interfaces import ObjectEvent
+from zope.interface.interfaces import ComponentLookupError
 
 
 class FieldTests(TestCase):
@@ -18,7 +18,7 @@ class FieldTests(TestCase):
 
     def test_list_value_type(self):
         f = RelationList(title=u"Test")
-        self.failUnless(isinstance(f.value_type, Relation))
+        self.assertTrue(isinstance(f.value_type, Relation))
 
 
 class EventTests(TestCase):
