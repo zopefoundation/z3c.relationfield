@@ -331,7 +331,7 @@ Let's ask the catalog about the relation from ``b`` to ``a``:
 
   >>> l = sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   >>> l
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 We look at this relation object again. We indeed go the right one:
 
@@ -369,7 +369,7 @@ interface ``IItem``:
   ...   'from_attribute': 'rel',
   ...   'from_interfaces_flattened': IItem,
   ...   'to_interfaces_flattened': IItem}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 There are no relations stored for another attribute:
 
@@ -416,7 +416,7 @@ We currently have a relation from ``b`` to ``a``:
 .. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 We can change the relation to point at a new object ``c``:
 
@@ -438,7 +438,7 @@ We should find now a single relation from ``b`` to ``c``:
 .. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 The relation to ``a`` should now be gone:
 
@@ -456,12 +456,12 @@ the ObjectModifiedEvent.
   >>> from z3c.relationfield.event import _setRelation
   >>> _setRelation(root['b'], 'my-fancy-relation', rel_to_a)
   >>> sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
   >>> notify(ObjectModifiedEvent(root['b']))
   >>> rel = sorted(catalog.findRelations({'to_id': intids.getId(root['a'])}))
   >>> rel
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
   >>> catalog.unindex(rel[0])
 
@@ -473,7 +473,7 @@ We have a relation from ``b`` to ``c`` right now:
 .. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 We can clean up an existing relation from ``b`` to ``c`` by setting it
 to ``None``:
@@ -505,7 +505,7 @@ Let's reestablish the removed relation:
   >>> notify(ObjectModifiedEvent(root['b']))
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 
 Copying an object with relations
@@ -583,7 +583,7 @@ We have a relation from ``b`` to ``c`` right now:
 .. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': c_id}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 We have no broken relations:
 
@@ -647,7 +647,7 @@ We can however find it by searching for relations that have a
 .. code-block:: python
 
   >>> sorted(catalog.findRelations({'to_id': None}))
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 A broken relation isn't equal to ``None`` (this was a bug):
 
@@ -699,7 +699,7 @@ We can query for this relation now:
 
   >>> l = sorted(catalog.findRelations({'to_id': some_object_id}))
   >>> l
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 RelationList
 ============
@@ -805,7 +805,7 @@ We can see the real relation object now:
 .. code-block:: python
 
   >>> root['d'].rel
-  <RelationValue object at ...>
+  <...RelationValue object at ...>
 
 The relation will also now show up in the catalog:
 
@@ -834,7 +834,7 @@ Again we can see the real relation object when we look at it:
 .. code-block:: python
 
   >>> root['multi_temp'].rel
-  [<RelationValue object at ...>]
+  [<...RelationValue object at ...>]
 
 And we will now see this new relation appear in the catalog:
 
@@ -874,3 +874,14 @@ It's pointing to the nonexistent path:
 
   >>> root['e'].rel.to_path
   'nonexistent'
+
+Setting up a releation catalog
+==============================
+
+This package provides a RelationCatalog initialized with a set of indexes commonly useful for queries on RelationValue objects.
+The default indexes are `from_id`, `to_id`, `from_attribute`, `from_interfaces_flattened` and `to_interfaces_flattened`.
+
+Sometimes it is needed to define custom indexes or use less than the default ones.
+The `zc.relationfield.index.RelationCatalog` class can be initialized with a list of dicts with keys `element` and `kwargs` to be passed to RelationCatalog `addValueIndex` method.
+As `element` in general the attribute on the `IRelationValue` like `IRelationValue['from_id']` is expected.
+However, if theres a subclass of `IRelationValue` is used with additional fields, those fields can be added here as indexes.
