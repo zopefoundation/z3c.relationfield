@@ -1,12 +1,8 @@
 CHANGES
 *******
 
-0.8.0 (unreleased)
+0.8.0 (2019-02-13)
 ==================
-
-Breaking changes:
-
-- *add item here*
 
 New features:
 
