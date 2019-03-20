@@ -18,9 +18,7 @@ from zope.schema import getFields
 
 @implementer(IRelationBrokenEvent)
 class RelationBrokenEvent(ObjectModifiedEvent):
-    '''
-    Event that is triggered when relation is broken.
-    '''
+    __doc__ = IRelationBrokenEvent.__doc__
 
 
 def addRelations(obj, event):

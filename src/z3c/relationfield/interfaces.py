@@ -105,4 +105,6 @@ class ITemporaryRelationValue(Interface):
         """
 
 class IRelationBrokenEvent(IObjectModifiedEvent):
-    pass
+    """
+    Event that is triggered when relation is broken.
+    """
