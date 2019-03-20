@@ -10,7 +10,9 @@ Breaking changes:
 
 New features:
 
-- *add item here*
+- Provide IRelationBrokenEvent to be able to distinguish the event when
+  subscribing to IObjectModifiedEvent
+  [vangheem]
 
 Bug fixes:
 

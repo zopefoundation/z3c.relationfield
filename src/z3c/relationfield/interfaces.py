@@ -1,5 +1,7 @@
 from zope.interface import Interface, Attribute
 from zope.schema.interfaces import IField, IList
+from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+
 
 class IHasOutgoingRelations(Interface):
     """Marker interface indicating that the object has outgoing relations.
@@ -101,3 +103,6 @@ class ITemporaryRelationValue(Interface):
 
         Returns real relation object
         """
+
+class IRelationBrokenEvent(IObjectModifiedEvent):
+    pass
