@@ -4,19 +4,11 @@ CHANGES
 0.9.0 (unreleased)
 ==================
 
-Breaking changes:
-
-- *add item here*
-
 New features:
 
 - Provide IRelationBrokenEvent to be able to distinguish the event when
   subscribing to IObjectModifiedEvent
   [vangheem]
-
-Bug fixes:
-
-- *add item here*
 
 
 0.8.0 (2019-02-13)
