@@ -1,1 +1,0 @@
-src/z3c/relationfield/README.rst
