@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-0.9.0 (unreleased)
+0.9.0 (2019-09-15)
 ==================
 
 New features:
