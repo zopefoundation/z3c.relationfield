@@ -14,7 +14,7 @@ New features:
 
 Bug fixes:
 
-- *add item here*
+- Test on Pyhon 3.7 and 3.8 as well (next to 2.7, 3.5, 3.6).  [maurits]
 
 
 0.9.0 (2019-09-15)
