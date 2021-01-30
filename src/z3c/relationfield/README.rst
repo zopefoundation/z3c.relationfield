@@ -701,6 +701,22 @@ We can query for this relation now:
   >>> l
   [<...RelationValue object at ...>]
 
+
+You may specify a vocabulary for a RelationChoice, in which case values set on
+the field will be validated against the vocabulary. In cases where the values in
+the vocabulary do not match the values set on the RelationChoice field – e.g.
+when a vocabulary contains paths or uuids and the field is given objects by a
+DataConverter – you will want to set the object_in_vocabulary flag on the field
+to False.
+
+  >>> class IVocabularyChoiceItem(Interface):
+  ...   rel = RelationChoice(
+  ...       title=u"Relation",
+  ...       vocabulary=u"my_custom_vocabulary",
+  ...       object_in_vocabulary=False
+  ...    )
+
+
 RelationList
 ============
 
