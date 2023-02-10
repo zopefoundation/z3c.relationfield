@@ -1,10 +1,11 @@
-from z3c.relationfield.interfaces import IRelation
-from z3c.relationfield.interfaces import IRelationChoice
-from z3c.relationfield.interfaces import IRelationList
 from zope.interface import implementer
 from zope.schema import Choice
 from zope.schema import Field
 from zope.schema import List
+
+from z3c.relationfield.interfaces import IRelation
+from z3c.relationfield.interfaces import IRelationChoice
+from z3c.relationfield.interfaces import IRelationList
 
 
 @implementer(IRelation)

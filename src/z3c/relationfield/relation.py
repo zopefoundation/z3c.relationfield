@@ -1,13 +1,15 @@
 from functools import total_ordering
+
 from persistent import Persistent
-from z3c.objpath.interfaces import IObjectPath
-from z3c.relationfield.interfaces import IRelationValue
-from z3c.relationfield.interfaces import ITemporaryRelationValue
 from zope import component
 from zope.interface import Declaration
 from zope.interface import implementer
 from zope.interface import providedBy
 from zope.intid.interfaces import IIntIds
+
+from z3c.objpath.interfaces import IObjectPath
+from z3c.relationfield.interfaces import IRelationValue
+from z3c.relationfield.interfaces import ITemporaryRelationValue
 
 
 @implementer(IRelationValue)
@@ -80,10 +82,10 @@ class RelationValue(Persistent):
         return not self.__eq__(other)
 
     def __lt__(self, other):
-        ''' Relations are sorted by default on a combination of the relation name,
-        the path of the object the relation is one and the path of the object
-        the relation is pointing to.
-        '''
+        """Relations are sorted by default on a combination of the relation
+        name, the path of the object the relation is one and the path of the
+        object the relation is pointing to.
+        """
         if (self.from_attribute or '') < (other.from_attribute or ''):
             return True
         if (self.from_path or '') < (other.from_path or ''):

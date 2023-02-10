@@ -1,9 +1,11 @@
-from zope.component.testlayer import ZCMLFileLayer
 import doctest
 import re
-import six
 import sys
 import unittest
+
+import six
+
+from zope.component.testlayer import ZCMLFileLayer
 
 
 # Evil hack to make pickling work with classes defined in doc tests

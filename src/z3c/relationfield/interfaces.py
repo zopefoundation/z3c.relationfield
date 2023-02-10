@@ -1,6 +1,8 @@
-from zope.interface import Interface, Attribute
-from zope.schema.interfaces import IField, IList
+from zope.interface import Attribute
+from zope.interface import Interface
 from zope.lifecycleevent.interfaces import IObjectModifiedEvent
+from zope.schema.interfaces import IField
+from zope.schema.interfaces import IList
 
 
 class IHasOutgoingRelations(Interface):
@@ -11,6 +13,7 @@ class IHasOutgoingRelations(Interface):
     catalog when appropriate.
     """
 
+
 class IHasIncomingRelations(Interface):
     """Marker interface indicating the the object has incoming relations.
 
@@ -18,7 +21,8 @@ class IHasIncomingRelations(Interface):
     relations. This will make sure that broken relations to that
     object are tracked properly.
     """
-    
+
+
 class IHasRelations(IHasIncomingRelations, IHasOutgoingRelations):
     """Marker interface indicating that the object has relations of any kind.
 
@@ -26,17 +30,21 @@ class IHasRelations(IHasIncomingRelations, IHasOutgoingRelations):
     well as incoming relations.
     """
 
+
 class IRelation(IField):
     """Simple one to one relations.
     """
+
 
 class IRelationChoice(IRelation):
     """A one to one relation where a choice of target objects is available.
     """
 
+
 class IRelationList(IList):
     """A one to many relation.
     """
+
 
 class IRelationValue(Interface):
     """A relation between the parent object and another one.
@@ -47,7 +55,7 @@ class IRelationValue(Interface):
     from_object = Attribute("The object this relation is pointing from.")
 
     from_id = Attribute("Id of the object this relation is pointing from.")
-    
+
     from_path = Attribute("The path of the from object.")
 
     from_interfaces = Attribute("The interfaces of the from object.")
@@ -55,9 +63,9 @@ class IRelationValue(Interface):
     from_interfaces_flattened = Attribute(
         "Interfaces of the from object, flattened. "
         "This includes all base interfaces.")
-    
+
     from_attribute = Attribute("The name of the attribute of the from object.")
-    
+
     to_object = Attribute("The object this relation is pointing to. "
                           "This value is None if the relation is broken.")
 
@@ -89,6 +97,7 @@ class IRelationValue(Interface):
         """Return True if this is a broken relation.
         """
 
+
 class ITemporaryRelationValue(Interface):
     """A temporary relation.
 
@@ -103,6 +112,7 @@ class ITemporaryRelationValue(Interface):
 
         Returns real relation object
         """
+
 
 class IRelationBrokenEvent(IObjectModifiedEvent):
     """

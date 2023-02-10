@@ -1,4 +1,12 @@
-# -*- coding: UTF-8 -*-
+from zc.relation.interfaces import ICatalog
+from zope import component
+from zope.event import notify
+from zope.interface import implementer
+from zope.interface import providedBy
+from zope.intid.interfaces import IIntIds
+from zope.lifecycleevent import ObjectModifiedEvent
+from zope.schema import getFields
+
 from z3c.relationfield.interfaces import IHasIncomingRelations
 from z3c.relationfield.interfaces import IHasOutgoingRelations
 from z3c.relationfield.interfaces import IRelation
@@ -6,14 +14,6 @@ from z3c.relationfield.interfaces import IRelationBrokenEvent
 from z3c.relationfield.interfaces import IRelationList
 from z3c.relationfield.interfaces import IRelationValue
 from z3c.relationfield.interfaces import ITemporaryRelationValue
-from zc.relation.interfaces import ICatalog
-from zope import component
-from zope.intid.interfaces import IIntIds
-from zope.event import notify
-from zope.interface import implementer
-from zope.interface import providedBy
-from zope.lifecycleevent import ObjectModifiedEvent
-from zope.schema import getFields
 
 
 @implementer(IRelationBrokenEvent)
@@ -75,9 +75,9 @@ def updateRelations(obj, event):
         # The object has not been added to the ZODB yet
         return
 
-    # remove previous relations coming from id (now have been overwritten)
-    # have to activate query here with list() before unindexing them so we don't
-    # get errors involving buckets changing size
+    # remove previous relations coming from id (now have been overwritten) have
+    # to activate query here with list() before unindexing them so we don't get
+    # errors involving buckets changing size
     rels = list(catalog.findRelations({'from_id': obj_id}))
     for rel in rels:
         if hasattr(obj, rel.from_attribute):
@@ -106,7 +106,7 @@ def breakRelations(event):
     except KeyError:
         # our intid was unregistered already
         return
-    rels = list(catalog.findRelations({'to_id': intids.getId(obj)}))
+    rels = list(catalog.findRelations({'to_id': obj_id}))
     for rel in rels:
         rel.broken(rel.to_path)
         # we also need to update the relations for these objects
@@ -178,10 +178,10 @@ def _potential_relations(obj):
                 yield name, None, relation
             if IRelationList.providedBy(field):
                 try:
-                    l = getattr(obj, name)
+                    l_ = getattr(obj, name)
                 except AttributeError:
                     # can't find the relation list on this object
                     continue
-                if l is not None:
-                    for i, relation in enumerate(l):
+                if l_ is not None:
+                    for i, relation in enumerate(l_):
                         yield name, i, relation

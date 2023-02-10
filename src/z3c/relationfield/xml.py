@@ -1,10 +1,11 @@
 from lxml import etree
+from zope.component import adapter
+from zope.interface import implementer
+
 from z3c.relationfield.interfaces import IRelation
 from z3c.relationfield.interfaces import IRelationList
 from z3c.relationfield.relation import TemporaryRelationValue
 from z3c.schema2xml import IXMLGenerator
-from zope.component import adapter
-from zope.interface import implementer
 
 
 @adapter(IRelationList)
@@ -12,7 +13,6 @@ from zope.interface import implementer
 class RelationListGenerator(object):
     """Export a relation list to XML.
     """
-
 
     def __init__(self, context):
         self.context = context
