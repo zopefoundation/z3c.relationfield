@@ -1,4 +1,11 @@
-recursive-include src *
-include *
-global-exclude *.pyc
+# Generated from:
+# https://github.com/zopefoundation/meta/tree/master/config/zope-product
+include *.md
+include *.rst
+include *.txt
+include buildout.cfg
+include tox.ini
 
+recursive-include src *.py
+recursive-include src *.rst
+recursive-include src *.zcml
