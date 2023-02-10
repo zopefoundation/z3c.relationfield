@@ -1,5 +1,4 @@
 import doctest
-import re
 import sys
 import unittest
 
@@ -32,7 +31,7 @@ def setUp(test):
 
 
 def tearDown(test):
-    del sys.modules['__builtin__']
+    del sys.modules['builtins']
     test.globs.clear()
 
 

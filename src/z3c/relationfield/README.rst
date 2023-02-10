@@ -158,7 +158,7 @@ We can ask for the object it is pointing at:
 
   >>> to_object = root['b'].rel.to_object
   >>> to_object.__name__
-  u'a'
+  'a'
 
 We can also get the object that is doing the pointing; since we
 supplied the ``IHasRelations`` interface, the event system took care
@@ -168,7 +168,7 @@ of setting this:
 
   >>> from_object = root['b'].rel.from_object
   >>> from_object.__name__
-  u'b'
+  'b'
 
 This object is also known as the ``__parent__``; again the event
 sytem took care of setting this:
@@ -188,13 +188,13 @@ and the object that is being pointed at:
   >>> pprint(sorted(root['b'].rel.from_interfaces))
   [<InterfaceClass zope.location.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass __builtin__.IItem>,
+   <InterfaceClass builtins.IItem>,
    <InterfaceClass persistent.interfaces.IPersistent>]
 
   >>> pprint(sorted(root['b'].rel.to_interfaces))
   [<InterfaceClass zope.location.interfaces.IContained>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass __builtin__.IItem>,
+   <InterfaceClass builtins.IItem>,
    <InterfaceClass persistent.interfaces.IPersistent>]
 
 We can also get the interfaces in flattened form:
@@ -206,7 +206,7 @@ We can also get the interfaces in flattened form:
    <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass __builtin__.IItem>,
+   <InterfaceClass builtins.IItem>,
    <InterfaceClass zope.location.interfaces.ILocation>,
    <InterfaceClass persistent.interfaces.IPersistent>,
    <InterfaceClass zope.interface.Interface>]
@@ -216,7 +216,7 @@ We can also get the interfaces in flattened form:
    <InterfaceClass z3c.relationfield.interfaces.IHasIncomingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasOutgoingRelations>,
    <InterfaceClass z3c.relationfield.interfaces.IHasRelations>,
-   <InterfaceClass __builtin__.IItem>,
+   <InterfaceClass builtins.IItem>,
    <InterfaceClass zope.location.interfaces.ILocation>,
    <InterfaceClass persistent.interfaces.IPersistent>,
    <InterfaceClass zope.interface.Interface>]
@@ -266,14 +266,14 @@ After this, we can get the path of the object the relation points to:
 .. code-block:: python
 
   >>> root['b'].rel.to_path
-  u'a'
+  'a'
 
 We can also get the path of the object that is doing the pointing:
 
 .. code-block:: python
 
   >>> root['b'].rel.from_path
-  u'b'
+  'b'
 
 Comparing and sorting relations
 ===============================
@@ -306,7 +306,7 @@ We can also sort relations:
 
 .. code-block:: python
 
-  >>> expected = [('', u'a'), ('', u'b'), (u'b', u'a')]
+  >>> expected = [('', 'a'), ('', 'b'), ('b', 'a')]
   >>> observed = [(rel.from_path, rel.to_path) for rel in
   ...  sorted([root['b'].rel, rel_to_a, rel_to_b])]
   >>> expected == observed
@@ -339,13 +339,13 @@ We look at this relation object again. We indeed go the right one:
 
   >>> rel = l[0]
   >>> rel.from_object.__name__
-  u'b'
+  'b'
   >>> rel.to_object.__name__
-  u'a'
+  'a'
   >>> rel.from_path
-  u'b'
+  'b'
   >>> rel.to_path
-  u'a'
+  'a'
 
 Asking for relations to ``b`` will result in an empty list, as no such
 relations have been set up:
@@ -517,8 +517,8 @@ Let's copy an object with relations:
 
   >>> from zope.copypastemove.interfaces import IObjectCopier
   >>> IObjectCopier(root['b']).copyTo(root)
-  u'b-2'
-  >>> u'b-2' in root
+  'b-2'
+  >>> 'b-2' in root
   True
 
 Two relations to ``c`` can now be found, one from the original, and
@@ -530,9 +530,9 @@ the other from the copy:
   >>> len(l)
   2
   >>> l[0].from_path
-  u'b'
+  'b'
   >>> l[1].from_path
-  u'b-2'
+  'b-2'
 
 
 Relations are sortable
@@ -554,9 +554,9 @@ Let's query all relations availble right now and sort them:
   >>> l[1].from_attribute
   'rel'
   >>> l[0].from_path
-  u'b'
+  'b'
   >>> l[1].from_path
-  u'b-2'
+  'b-2'
 
 
 Removing an object with relations
@@ -572,7 +572,7 @@ from the catalog:
   >>> len(l)
   1
   >>> l[0].from_path
-  u'b'
+  'b'
 
 
 Breaking a relation
@@ -617,7 +617,7 @@ The original relation still has a ``to_path``:
 .. code-block:: python
 
   >>> b.rel.to_path
-  u'c'
+  'c'
 
 It's broken however as there is no ``to_object``:
 

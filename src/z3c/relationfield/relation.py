@@ -1,13 +1,13 @@
 from functools import total_ordering
 
 from persistent import Persistent
+from z3c.objpath.interfaces import IObjectPath
 from zope import component
 from zope.interface import Declaration
 from zope.interface import implementer
 from zope.interface import providedBy
 from zope.intid.interfaces import IIntIds
 
-from z3c.objpath.interfaces import IObjectPath
 from z3c.relationfield.interfaces import IRelationValue
 from z3c.relationfield.interfaces import ITemporaryRelationValue
 
