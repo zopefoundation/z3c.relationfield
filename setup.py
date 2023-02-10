@@ -34,7 +34,7 @@ setup(
     ],
     keywords='relation field',
     author='Martijn Faassen',
-    author_email='faassen@startifact.com',
+    author_email='zope-dev@zope.dev',
     url='https://github.com/zopefoundation/z3c.relationfield',
     license='ZPL 2.1',
     packages=find_packages('src'),
@@ -42,6 +42,7 @@ setup(
     namespace_packages=['z3c'],
     include_package_data=True,
     zip_safe=False,
+    python_requires='>=3.7',
     install_requires=[
         'setuptools',
         'z3c.objpath',

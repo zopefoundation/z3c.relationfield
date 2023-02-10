@@ -20,7 +20,7 @@ class FieldTests(TestCase):
     """
 
     def test_list_value_type(self):
-        f = RelationList(title=u"Test")
+        f = RelationList(title="Test")
         self.assertTrue(isinstance(f.value_type, Relation))
 
 

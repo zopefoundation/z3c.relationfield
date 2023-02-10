@@ -10,7 +10,7 @@ from z3c.schema2xml import IXMLGenerator
 
 @adapter(IRelationList)
 @implementer(IXMLGenerator)
-class RelationListGenerator(object):
+class RelationListGenerator:
     """Export a relation list to XML.
     """
 
@@ -33,7 +33,7 @@ class RelationListGenerator(object):
 
 @adapter(IRelation)
 @implementer(IXMLGenerator)
-class RelationGenerator(object):
+class RelationGenerator:
     """Eport a relation to XML.
     """
 
