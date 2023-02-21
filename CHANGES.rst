@@ -1,20 +1,16 @@
 CHANGES
 *******
 
-0.9.1 (unreleased)
-==================
+1.0 (unreleased)
+================
 
 Breaking changes:
 
-- *add item here*
+- Drop support for Python 2.7, 3.5, 3.6.
 
 New features:
 
-- *add item here*
-
-Bug fixes:
-
-- Test on Python 3.7 and 3.8 as well (next to 2.7, 3.5, 3.6).  See `PR #19 <https://github.com/zopefoundation/z3c.relationfield/pull/19/>`_.
+- Add support for Python 3.7, 3.8, 3.9, 3.10, 3.11.
 
 
 0.9.0 (2019-09-15)

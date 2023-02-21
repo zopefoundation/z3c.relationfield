@@ -1,9 +1,12 @@
-from setuptools import setup, find_packages
 import os
+
+from setuptools import find_packages
+from setuptools import setup
 
 
 def read(*rnames):
     return open(os.path.join(*rnames)).read()
+
 
 long_description = (
     read('src', 'z3c', 'relationfield', 'README.rst')
@@ -16,23 +19,22 @@ long_description = (
 
 setup(
     name='z3c.relationfield',
-    version='0.9.1.dev0',
+    version='1.0.dev0',
     description="A relation field framework for Zope 3.",
     long_description=long_description,
     classifiers=[
         'Development Status :: 6 - Mature',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
+        'Programming Language :: Python :: 3.10',
+        'Programming Language :: Python :: 3.11',
     ],
     keywords='relation field',
     author='Martijn Faassen',
-    author_email='faassen@startifact.com',
+    author_email='zope-dev@zope.dev',
     url='https://github.com/zopefoundation/z3c.relationfield',
     license='ZPL 2.1',
     packages=find_packages('src'),
@@ -40,6 +42,7 @@ setup(
     namespace_packages=['z3c'],
     include_package_data=True,
     zip_safe=False,
+    python_requires='>=3.7',
     install_requires=[
         'setuptools',
         'z3c.objpath',

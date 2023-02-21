@@ -8,7 +8,7 @@ import z3c.relationfield
 
 
 @implementer(IIntIds)
-class MockIntIds(object):
+class MockIntIds:
     """Dumb utility for unit tests, returns sequential integers. Not a
     complete implementation."""
 
@@ -22,7 +22,7 @@ mock_intids = MockIntIds()
 
 
 @implementer(ICatalog)
-class MockCatalog(object):
+class MockCatalog:
     """Does nothing except exist"""
 
     def findRelations(self, query):
@@ -51,5 +51,5 @@ def unregister_fake_catalog():
 
 
 @implementer(z3c.relationfield.interfaces.IHasRelations)
-class MockContent(object):
+class MockContent:
     pass

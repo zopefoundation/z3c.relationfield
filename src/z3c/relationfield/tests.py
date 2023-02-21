@@ -1,15 +1,18 @@
-from unittest import makeSuite, TestCase, TestSuite
-from z3c.relationfield.testing import (
-    register_fake_intid,
-    register_fake_catalog,
-    unregister_fake_intid,
-    unregister_fake_catalog,
-    MockContent,
-)
-from z3c.relationfield import event
-from z3c.relationfield import RelationList, Relation
-from zope.interface.interfaces import ObjectEvent
+from unittest import TestCase
+from unittest import TestSuite
+from unittest import makeSuite
+
 from zope.interface.interfaces import ComponentLookupError
+from zope.interface.interfaces import ObjectEvent
+
+from z3c.relationfield import Relation
+from z3c.relationfield import RelationList
+from z3c.relationfield import event
+from z3c.relationfield.testing import MockContent
+from z3c.relationfield.testing import register_fake_catalog
+from z3c.relationfield.testing import register_fake_intid
+from z3c.relationfield.testing import unregister_fake_catalog
+from z3c.relationfield.testing import unregister_fake_intid
 
 
 class FieldTests(TestCase):
@@ -17,7 +20,7 @@ class FieldTests(TestCase):
     """
 
     def test_list_value_type(self):
-        f = RelationList(title=u"Test")
+        f = RelationList(title="Test")
         self.assertTrue(isinstance(f.value_type, Relation))
 
 

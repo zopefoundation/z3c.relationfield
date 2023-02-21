@@ -1,9 +1,10 @@
-from z3c.relationfield.interfaces import IRelationValue
+import BTrees
 from zc.relation.catalog import Catalog
 from zope import component
 from zope.intid.interfaces import IIntIds
 
-import BTrees
+from z3c.relationfield.interfaces import IRelationValue
+
 
 DEFAULT_INDEXES = [
     {
