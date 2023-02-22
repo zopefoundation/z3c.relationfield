@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-1.0 (unreleased)
+1.0 (2023-02-22)
 ================
 
 Breaking changes:
