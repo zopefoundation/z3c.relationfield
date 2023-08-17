@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-1.1 (unreleased)
+1.1 (2023-08-17)
 ================
 
 - Consider RelationValue without source as broken.
