@@ -102,7 +102,7 @@ class RelationValue(Persistent):
         self.to_id = None
 
     def isBroken(self):
-        return self.to_id is None or self.from_object is None
+        return self.to_id is None
 
 
 @implementer(ITemporaryRelationValue)
