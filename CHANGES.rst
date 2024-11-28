@@ -8,6 +8,9 @@ CHANGES
 
 * Drop support for Python 3.7.
 
+* Fix tests for Python 3.13.
+  [petschki]
+
 
 1.1 (2023-08-17)
 ================
