@@ -7,6 +7,12 @@ CHANGES
 - Revert: Consider RelationValue without source as broken.
   [ksuess]
 
+- Add support for Python 3.12, 3.13.
+
+- Drop support for Python 3.7.
+
+- Fix tests for Python 3.13.
+  [petschki]
 
 1.1 (2023-08-17)
 ================
