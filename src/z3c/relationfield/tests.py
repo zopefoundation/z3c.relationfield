@@ -1,6 +1,6 @@
 from unittest import TestCase
 from unittest import TestSuite
-from unittest import makeSuite
+from unittest import defaultTestLoader
 
 from zope.interface.interfaces import ComponentLookupError
 from zope.interface.interfaces import ObjectEvent
@@ -79,6 +79,6 @@ class EventTests(TestCase):
 
 def test_suite():
     suite = TestSuite()
-    suite.addTest(makeSuite(EventTests))
-    suite.addTest(makeSuite(FieldTests))
+    suite.addTest(defaultTestLoader.loadTestsFromTestCase(EventTests))
+    suite.addTest(defaultTestLoader.loadTestsFromTestCase(FieldTests))
     return suite
