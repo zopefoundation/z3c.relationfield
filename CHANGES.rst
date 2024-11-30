@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-2.0.0 (unreleased)
+2.0.0 (2024-11-30)
 ==================
 
 - Revert: Consider RelationValue without source as broken.
