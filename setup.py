@@ -19,7 +19,7 @@ long_description = (
 
 setup(
     name='z3c.relationfield',
-    version='2.0.0',
+    version='2.0.1.dev0',
     description="A relation field framework for Zope 3.",
     long_description=long_description,
     classifiers=[
