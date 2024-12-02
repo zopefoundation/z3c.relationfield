@@ -1,8 +1,14 @@
 CHANGES
 *******
 
-1.2 (unreleased)
+2.1 (unreleased)
 ================
+
+- Nothing changed yet.
+
+
+2.0.0 (2024-11-30)
+==================
 
 - Revert: Consider RelationValue without source as broken.
   [ksuess]
