@@ -21,7 +21,7 @@ class FieldTests(TestCase):
 
     def test_list_value_type(self):
         f = RelationList(title="Test")
-        self.assertTrue(isinstance(f.value_type, Relation))
+        self.assertIsInstance(f.value_type, Relation)
 
 
 class EventTests(TestCase):
