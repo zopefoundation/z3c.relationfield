@@ -51,7 +51,6 @@ setup(
             "zope.copypastemove",
             "zope.site",
         ],
-        "xml": ["z3c.schema2xml >= 1.0", "lxml"],
     },
     entry_points={},
 )
