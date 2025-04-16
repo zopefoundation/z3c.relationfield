@@ -24,11 +24,4 @@
     handler=".event.breakRelations"
     />
 
-  <configure zcml:condition="installed z3c.schema2xml">
-
-    <adapter factory=".xml.RelationListGenerator" />
-    <adapter factory=".xml.RelationGenerator" />
-
-  </configure>
-
 </configure>

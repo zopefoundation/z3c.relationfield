@@ -1,8 +1,13 @@
 CHANGES
 *******
 
-2.1 (unreleased)
+3.0 (unreleased)
 ================
+
+* Replace ``pkg_resources`` namespace with PEP 420 native namespace.
+
+* Drop ``xml`` extra and all the code which was enabled by it.
+  (``z3c.schema2xml`` is unmaintained for years now.)
 
 * Drop support for Python 3.8.
 
