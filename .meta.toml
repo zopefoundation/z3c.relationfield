@@ -1,8 +1,8 @@
-# Generated from:
-# https://github.com/zopefoundation/meta/tree/master/config/zope-product
+# Generated with zope.meta (https://zopemeta.readthedocs.io/) from:
+# https://github.com/zopefoundation/meta/tree/master/src/zope/meta/zope-product
 [meta]
 template = "zope-product"
-commit-id = "e1995c20"
+commit-id = "76e81852"
 
 [python]
 with-sphinx-doctests = false
