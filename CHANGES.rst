@@ -1,7 +1,7 @@
 CHANGES
 *******
 
-3.1 (unreleased)
+3.1 (2026-05-18)
 ================
 
 * Add support for Python 3.14.
