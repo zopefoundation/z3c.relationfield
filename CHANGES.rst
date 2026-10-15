@@ -4,6 +4,8 @@ CHANGES
 3.2 (unreleased)
 ================
 
+* Drop support for Python 3.10.
+
 Breaking changes:
 
 - *add item here*
