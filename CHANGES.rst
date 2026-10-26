@@ -4,17 +4,9 @@ CHANGES
 3.2 (unreleased)
 ================
 
-Breaking changes:
+* Add support for Python 3.15.
 
-- *add item here*
-
-New features:
-
-- *add item here*
-
-Bug fixes:
-
-- *add item here*
+* Drop support for Python 3.10.
 
 
 3.1 (2026-05-18)
@@ -100,7 +92,7 @@ Bug fixes:
 
 - Python 3 compatibility: Make ``RelationValue`` hashable. [sallner]
 
-- Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
+- Renamed ``README.txt`` to ``README.rst`` and ``CHANGES.txt`` to
   ``CHANGES.rst``.
   [thet]
 
