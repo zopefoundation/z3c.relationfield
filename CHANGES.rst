@@ -104,7 +104,7 @@ Bug fixes:
 
 - Python 3 compatibility: Make ``RelationValue`` hashable. [sallner]
 
-- Renamed ``README.txt``to ``README.rst`` and ``CHANGES.txt`` to
+- Renamed ``README.txt`` to ``README.rst`` and ``CHANGES.txt`` to
   ``CHANGES.rst``.
   [thet]
 
